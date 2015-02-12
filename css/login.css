@@ -1,0 +1,19 @@
+#login_window{
+    width: 300px;
+    height: auto;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    margin-left: -150px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 0 10px lightgrey;
+    border: 1px solid lightgrey;
+}
+#login_window input{
+    width: 220px;
+}
+#login_window form{
+    width: 261px;
+    margin: 20px 20px 20px 20px;
+}

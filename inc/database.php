@@ -42,7 +42,7 @@ class DB {
         return $result;
     }
     
-    public function execute($query){
+    public function insert($query){
         $conn = $this->connect();
         $lastID = false;
         try{
@@ -55,7 +55,7 @@ class DB {
         return $lastID;
     }
     
-    public function execute_values($query,$values){
+    public function insert_values($query,$values){
         $conn = $this->connect();
         $lastID = false;
         foreach($values as $value){
@@ -74,7 +74,36 @@ class DB {
         }
         
         return $lastID;
+    }
+    
+        public function update($query){
+        $conn = $this->connect();
+        try{
+            $delta_rows = $conn->exec($query);
+            if($delta_rows === false){return false;}
+        } catch (PDOException $e) {
+            if(DB::$debug === true ){var_dump($e->getMessage());}
+        }
+        return $delta_rows;
+    }
+    
+    public function update_values($query,$values){
+        $conn = $this->connect();
+        foreach($values as $value){
+            if(gettype($value) === 'string'){
+                $query = str_replace("?","'".$value."'",1);
+            } else {
+                $query = str_replace("?",$value,1);
+            }
+        }
+        try{
+            $delta_rows = $conn->exec($query);
+            if($delta_rows === false){return false;}
+        } catch (PDOException $e) {
+            if(DB::$debug === true ){var_dump($e->getMessage());}
+        }
         
+        return $delta_rows;
     }
     
     public static function crypt($unencrypted_pass){

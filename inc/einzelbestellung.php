@@ -18,7 +18,7 @@ class einzelbestellung {
         $artikel = new Artikel($art_id);
         $this->gesamtpreis_erhoehen($artikel->preis());
         $query_artlist = "INSERT INTO doener_artikelliste (ebest_id, art_id) VALUES(?, ?)";
-        $artlist_id = $DB->execute_values($query_artlist, array($this->ebest_id, $art_id));
+        $artlist_id = $DB->insert_values($query_artlist, array($this->ebest_id, $art_id));
         $this->$artlist_ids[]=$artlist_id[0];
         return $artlist_id[0];
     }

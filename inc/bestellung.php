@@ -9,20 +9,33 @@ class bestellung{
         $this->datum = timestamp();
         $DB = new DB();
         $query="INSERT INTO doener_tagesestellung (datum,gesamtpreis,bemerkungen) VALUES(?,?,?)";
-        $this->best_id = $DB->execute_values($query, array($this->datum, 0.0, ""));
+        $this->best_id = $DB->insert_values($query, array($this->datum, 0.0, ""));
         $this->best_data = array( "datum"=>$this->datum, "gesamtpreis" => 0.0, "bemerkungen" => "");
     }
     
     public function gesamtpreisErhoehen($preisDazu){
         if (is_numeric($preisDazu)){
             $this->best_data["gesamtpreis"] += $preisDazu;
+            $this->saveAenderung();
             return true;
         } else {
             return false;
         }
     }
     
-    
+    public function saveAenderung($what = "gesamtpreis"){
+        $DB = new DB();
+        $query = "UPDATE doener_tagesestellung SET ";
+        switch($what){
+            case "gesamtpreis" :      $query .= "gesamtpreis=? "; break;
+            case "bemerkung":   $query .= "bemerkungen=? "; break;
+            case "datum":       $query .= "datum=? "; break;
+            default:       $query .= "datum=?, gesamtpreis=? bemerkungen=? "; break;
+        }
+        $query .= "WHERE best_id = ".$this->best_id;
+        if($what != )
+        $DB->update_values($query, $this->)
+    }
     
     public function showTagesbestellung(){
         $DB = new DB();

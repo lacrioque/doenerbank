@@ -5,6 +5,9 @@ var Artikel = {
             Mustache.parse(this.tpl), 
             Mustache.parse(this.tpl_kategorie), 
         this.load().done(function(artikel){
+            if(artikel == false || artikel == ""){
+                jObject.html(self.tpl_noartikel);
+            } else {
             kategorien = artikel.kategorien;
             delete(artikel.kategorien);
             $.each(kategorien, function(i,kategorie){
@@ -19,6 +22,7 @@ var Artikel = {
                 html += '</div>';
             });
             jObject.html(html);
+        }
         });
     },
     load: function(){
@@ -45,8 +49,9 @@ var Artikel = {
     url: "/ajax/artikel.php?artikel=alle",
     container: $('#artikelliste'),
     tpl_debug: "{{#artikel}}{{{.}}}{{/artikel}}",
-    tpl: "<div class='span3 artikel-einzel'><p class='artikel-name'> {{ name }} </p> <p class='artikel-beschreibung'> {{ &beschreibung }}</p><p class='artikel-preis'> {{ &preis }} </p> <button class='btn-primary btn-default artikel-bestellen' id='artikel_{{ art_id }} '><span>Will ich</span><span class='glyphicon glyphicon-shopping-cart' aria-hidden='true'></span></button></div>",
+    tpl: "<div class='span3 artikel-einzel'><p class='artikel-name'> {{ name }} </p> <p class='artikel-beschreibung'> {{ &beschreibung }}</p><p class='artikel-preis'> {{ &preis }} </p> <button class='btn-primary btn-default artikel-bestellen' data-artikelnummer='{{ art_id }}' id='artikel_{{ art_id }} '><span>Will ich</span><span class='glyphicon glyphicon-shopping-cart' aria-hidden='true'></span></button></div>",
     tpl_kategorie: "<div class='row'><h3> {{ kategorie }} </h3></div>",
+    tpl_noartikel: "<div class='span6 offset3 text-error'> Leider sind derzeit keine Artikel im System </div>",
     tpl_keine_artikel: function(){ return $('tpl_no_artikel').html();},
     
     render_single: function(){},

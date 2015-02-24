@@ -124,10 +124,8 @@
                 <h1>Ein Gericht bestellen</h1>
                 <div class="container-fluid" id="artikelliste"></div>
 						
-						<script type="text/x-tmpl-mustache" id = "tpl_no_artikel">
-								<div class='col-md-6 col-md-offset-3 text-error'> Leider sind derzeit keine Artikel im System </div>
-						</script>
-				<script>Artikel.render($('#artikelliste'));</script>
+            
+            <script>Artikel.render($('#artikelliste'));</script>
             <?php endif ?>
             <?php if($view == "admin"):?>
             

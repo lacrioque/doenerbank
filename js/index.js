@@ -22,6 +22,13 @@ $('#register_btn').on('click', function(e){
    Register.new($('#username').val(), $('#password').val());
 });
 
+$('.artikel-bestellen').on('click',function(e){
+    e.preventDefault();
+    console.log($(this).data('artikelnummer'));
+    WARENKORB.add($(this).data('artikelnummer'));
+});
+
+
 $('.onclick_false').on('click', function(){return false;});
 
 });

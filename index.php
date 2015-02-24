@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <?php 
-    include("/inc/doenerbank.php");
+    include("inc/doenerbank.php");
 	$loggedIn = false;
 	
 	if(isset($_SESSION['user_id'])){

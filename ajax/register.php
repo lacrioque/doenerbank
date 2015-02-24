@@ -1,5 +1,6 @@
 <?php
-require("../inc/doenerbank.php");
+require_once("../inc/defines.php");
+include("../inc/database.php");
 $values = $_GET;
 $out = "";
 if($values['register'] == true && $values['timelock'] == "false"){
@@ -27,5 +28,5 @@ if($values['register'] == true && $values['timelock'] == "false"){
 					);
 	
 }
-session_destroy();
+//session_destroy();
 die($out);

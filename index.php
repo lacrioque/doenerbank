@@ -1,21 +1,22 @@
 <!DOCTYPE HTML>
 <?php 
-    include("inc/doenerbank.php");
+    include("/inc/doenerbank.php");
 	$loggedIn = false;
 	
-	if($_SESSION['loggedin']){
-		var_dump("alles paletti");
-		$user = new user("","", $_SESSION['loggedIn']);
+	if(isset($_SESSION['user_id'])){
+		$user = new user($_SESSION['user_id']);
 		$loggedIn = $user->checkLogin();
 		if($loggedIn){
 			$_SESSION['loggedin'] = $user->sessionCrypt();
 		}
 	}
+	
     if(isset($_POST["username"]) && isset($_POST["password"])){
-        $user = new user($_POST["username"], $_POST["password"]);
+        $user = new user();
         $loggedIn = $user->checkLogin();
 		if($loggedIn){
 			$_SESSION['loggedin'] = $user->sessionCrypt();
+			$_SESSION['user_id'] = $user->getID();
 		}
     }
 
@@ -31,30 +32,25 @@
     }else{
         $view = "order";
     }
-    
+    if($loggedIn && $user !== NULL){
     $showAdminHint = false;
-    if($view == "admin"){
-        //if(!user.isAdmin()){
-        if(true){
-            $showAdminHint = true;
-            $view = "order";
-        }
-    }
+		if($view == "admin"){
+			if(!$user->isAdmin()){
+				$showAdminHint = true;
+				$view = "order";
+			}
+		}
+	} else {
+		$showAdminHint = true;
+	}
 ?>
 <html>
 <head>
-	<meta http-equiv="content-type" content="text/html" charset="utf-8"/>
+	<meta charset="utf-8"/>
 	<meta name="author" content="Steffen Pfeil - ITFU1" />
-	<title>ITFU1 - D&ouml;ner</title>
+	<title>ITFU1 - Döner</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    
-    <link href="css/main.css" rel="stylesheet" type="text/css"/>
-    <link href="css/login.css" rel="stylesheet" type="text/css"/>
-    <link href="css/nav.css" rel="stylesheet" type="text/css"/>
-    <script src="js/checkLoginForm.js"></script>
+    <?php echo $header ?>
 </head>
 
 <body>
@@ -75,15 +71,26 @@
           <ul class="nav">
             <li><a href="index.php?view=order">Bestellen</a></li>
             <li><a href="index.php?view=admin">Administration</a></li>
-            <li><a>Logout</a></li>
+            <li>  
+				<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				Logout <span class="caret"></span>
+			  </button>
+				<ul class="dropdown-menu" role="menu">
+					<li>Wirklich ausloggen?</li>
+					<li><a href="logout.php">Ja</a></li>
+					<li><a href="#" class="onclick_false">Nein</a></li>
+				</ul>
+			</li>
           </ul>  
-     
+		  
           <!-- Everything you want hidden at 940px or less, place within here -->
           <div class="nav-collapse collapse">
             <!-- .nav, .navbar-search, .navbar-form, etc -->
 
           </div>
-     
+		  <span class="pull-right clearfix text-right text-success">
+			  <?php if($loggedIn){echo "Willkommen ".$user->getName();} ?>
+		  </span>
         </div>
       </div>
     </div>
@@ -109,14 +116,18 @@
                       <input class="span2" id="password" type="password" placeholder="Passwort" name="password">
                     </div>    
                     <button type="submit" id="login_btn" disabled="true" class="login_btn btn btn-primary">Login</button>              
-                    <button type="button" id="register_btn" disabled="true" class="login_btn btn btn-secondary">Register</button>              
+                    <button id="register_btn" disabled="true" class="register_btn login_btn btn btn-secondary">Register</button>              
                 </form>
             </div>
     <?php else: ?>        
             <?php if($view == "order"):?>
-                
                 <h1>Ein Gericht bestellen</h1>
-                
+                <div class="container-fluid" id="artikelliste"></div>
+						
+						<script type="text/x-tmpl-mustache" id = "tpl_no_artikel">
+								<div class='col-md-6 col-md-offset-3 text-error'> Leider sind derzeit keine Artikel im System </div>
+						</script>
+				<script>Artikel.render($('#artikelliste'));</script>
             <?php endif ?>
             <?php if($view == "admin"):?>
             

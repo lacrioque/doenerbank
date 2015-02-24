@@ -7,27 +7,32 @@ class user{
 private $user_id;
 private $user_pass;
 private $user_data;
+private $crypted = "";
 private $login = false;
 private $time;
 
 /**
- * Konstukter der User Klasse gilt gleichermaßen als Login Klasse
+ * Konstukter der User Klassebraucht eine ID, 
+ * bekommt er keine versucht er die POST_DATEN zu lesen
  * Gibt es keinen gültigen User, destructed sicht sie Klasse selbst.
  * 
  * @param String $user Der Username
  * @param String $pass Das Passwort
  */
-public function __construct($user, $pass, $session = false){
-	if($session!== false){
-		$query = "SELECT user_id,passwort,name FROM doener_nutzer WHERE loggedIn = ?";
-		$array = array($session);
-	} else {
-		$query = "SELECT user_id,passwort,name FROM doener_nutzer WHERE name = ? and passwort = ?";
+public function __construct($user_id = false){
+	if($user_id === false){
+		$query = "SELECT user_id,passwort,name FROM doener_nutzer WHERE name = ? AND passwort = ?";
+		$user = $_POST["username"]; 
+		$pass = $_POST["password"];
 		$array = array($user,DB::crypt($pass));
+	} else {
+		$query = "SELECT user_id,passwort,name,loggedIn FROM doener_nutzer WHERE user_id = ?";
+		$array = array( $user_id);
 	}
     $DB = new DB();
     $result = $DB->query_values($query,$array);
     if($result !== false){
+		$this->crypted = isset($result[0]['user_id']['loggedIn']) ? $result[0]['user_id']['loggedIn'] : "";
         $this->login = true;
         $this->user_id = $result[0]['user_id'];
         $this->user_pass = $result[0]['passwort'];
@@ -41,16 +46,30 @@ public function __construct($user, $pass, $session = false){
 		$loginQuery = "UPDATE doener_nutzer SET loggedIn = ? WHERE user_id = ?";
 		$DB->update_values($loginQuery, array($this->sessionCrypt(), $this->user_id));
     } else {
-        $this->__destruct();
+        return $this->logout();
     }
 }
 
 public function sessionCrypt(){
-	return crypt($this->user_id + $this->user_pass + $this->user_data['name'] + $_SESSION['time']);
-}
+	if($this->crypted){
+		return $this->crypted;
+	} else {
+		$this->crypted = crypt($this->user_id + $this->user_pass + $this->user_data['name'] + $_SESSION['time']);
+		return $this->crypted;
+	}
+	}
 
 public function checkLogin(){
 	return  $this->login;
+}
+public function getID(){
+	return  $this->user_id;
+}
+public function getName(){
+	return  $this->user_data['name'];
+}
+public function isAdmin(){
+	return  $this->user_data['admin'] == 1 ? true : false;
 }
 
 public function saveToSession($keyValueArr){
@@ -93,23 +112,17 @@ public function getUserBestellungen(){
     return $returner;
 }
 
-public static function registerNew($user, $pass){
-	$DB = new DB();
-	$query = "INSERT INTO doener_nutzer (name,passwort) VALUES(?, ?)";
-	$newID = $DB->insert_values($query, array($user,DB::crypt($pass)));
-	if($newID !== false){
-		return true;
-	} else {
-		return false;
-	}
-}
-public function __destruct(){
+
+public function logout(){
 	unset($this->user_id);
 	unset($this->user_pass);
 	unset($this->user_data);
 	unset($this->login);
 	unset($this->time);
-	session_destroy();
+	$DB = new DB();
+	$loginQuery = "UPDATE doener_nutzer SET loggedIn = ? WHERE user_id = ?";
+	$DB->update_values($loginQuery, array("", $this->user_id));
+	header('Location: /logout.php');
 	return NULL;
 }
 }

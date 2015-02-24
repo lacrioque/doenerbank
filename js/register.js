@@ -7,17 +7,20 @@ var Register = {
     popup : $('<div></div>'),
     css : {
         position: 'absolute',
-        left: '20%',
-        right: '20%',
-        top: '20%',
-        bottom: '20%',
-        height: '60%',
-        width: '60%',
+        'box-sizing': 'border-box',
+        left: '1%',
+        right: '1%',
+        top: '1%',
+        bottom: '1%',
+        height: '98%',
+        width: '98%',
         'z-index': 1000,
         border: "none",
-        'border-radius':"10%",
         'box-shadow': "2px 2px 4px hsla(263, 35%, 85%, 0.6)",
-        'background': 'hsla(263, 25%, 85%, 0.6)'
+        'background': 'hsla(263, 25%, 85%, 0.6)',
+        'padding': '10%',
+        'font-size': '120%',
+        'text-align': 'center'
         },
     checktime : function(){
         var timelock = localStorage.getItem('timelock')
@@ -25,34 +28,29 @@ var Register = {
         return  timelock < (+new Date()) ? true : false ;
     },
     new : function(user,pass){
-        this.popup.css(this.css);
-        this.popup.html('<p style="margin:auto, text-align: center">Vielen Dank für die Registrierung</p>\
+        
+        var self = this, data = this.extradata, popup_active = this.popup, durl;
+        
+        popup_active.css(this.css);
+        popup_active.html('<p style="margin:auto, text-align: center">Vielen Dank für die Registrierung</p>\
                     <p style="margin:auto, text-align: center">Bitte warten sie einen kurzen Moment</p>\
                         ')
-        $('body').append('popup');
-        var data = {};
-        var self = this;
-        data.merge(this.extradata);
+        $('body').append(popup_active);
         data.user = user;
         data.pass = pass;
         data.timelock = this.checktime();
-        var durl = url + $.param(data);
+        durl = this.url + "?" + $.param(data);
         $.getJSON(durl, function(data){
+            console.log(data);
             if(data.success !== undefined){
-                self.popup.html = data.message;
+                popup_active.html("<p>" +data.message + "</p>");
                 if(data.success === true){
-                    setTimeout(function(){location.reload();}, 1000);
+                    setTimeout(function(){location.reload();}, 2000);
                 } else {
                     localStorage.setItem('timelock', (5000+new Date()));
-                    setTimeout(function(){location.reload();}, 1000);
+                    setTimeout(function(){location.reload();}, 2000);
                 }
             }
          });
     }
 };
-
-
-$('#register_btn').on('click', function(e){
-   e.preventDefault();
-   Register.new($('#user').val(), $('#password').val());
-});

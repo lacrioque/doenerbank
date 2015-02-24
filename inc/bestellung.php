@@ -13,6 +13,10 @@ class bestellung{
         $this->best_data = array( "datum"=>$this->datum, "gesamtpreis" => 0.0, "bemerkungen" => "");
     }
     
+	public function getBestId(){
+		return $this->best_id;
+	}
+	
     public function gesamtpreisErhoehen($preisDazu){
         if (is_numeric($preisDazu)){
             $this->best_data["gesamtpreis"] += $preisDazu;
@@ -23,18 +27,16 @@ class bestellung{
         }
     }
     
-    public function saveAenderung($what = "gesamtpreis"){
+	public function bemerkungDazu($bemerkung){
+		$this->best_data['bemerkungen'] += $bemerkung."|";
+		$this->saveAenderung();
+	}
+	
+    public function saveAenderung(){
         $DB = new DB();
-        $query = "UPDATE doener_tagesestellung SET ";
-        switch($what){
-            case "gesamtpreis" :      $query .= "gesamtpreis=? "; break;
-            case "bemerkung":   $query .= "bemerkungen=? "; break;
-            case "datum":       $query .= "datum=? "; break;
-            default:       $query .= "datum=?, gesamtpreis=? bemerkungen=? "; break;
-        }
-        $query .= "WHERE best_id = ".$this->best_id;
-        if($what != )
-        $DB->update_values($query, $this->)
+        $query = "UPDATE doener_tagesestellung SET gesamtpreis=?, bemerkungen=? WHERE best_id = ".$this->best_id;
+		$array = array($this->best_data['gesamtpreis'],$this->best_data['bemerkungen']);
+        $DB->update_values($query, $array);
     }
     
     public function showTagesbestellung(){
@@ -52,4 +54,17 @@ class bestellung{
         return $tageswerk;
     }
     
+	public function showBemerkungen($wann=false){
+		if(!$wann){
+			$bemerkungen_formatted = explode("|", $this->best_data['bemerkungen']);
+			return $bemerkungen_formatted;
+		} else {
+			$DB = new DB();
+			$query = "SELECT bemerkungen FROM doener_tagesestellung WHERE datum = ?";
+			$bemerkungen = $DB->query_values($query, array($wann));
+			$bemerkungen_formatted = empty($bemerkungen) || !$bemerkungen ? "" : explode("|", $bemerkungen);
+			return $bemerkungen_formatted;
+		}
+		
+	}
 }

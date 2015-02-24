@@ -6,16 +6,14 @@ function checkLoginFields(){
     if(password.length > 7 && username.length > 4){
         check = true;
     }
-    console.log(check);
-    console.log(password);
     return check;
 }
 
 $(document).ready(function(){
     $('#username').on('keyup', function(event){
-       checkLoginFields() ? $('#login_btn').prop('disabled',false): $('#login_btn').prop('disabled',true);
+       checkLoginFields() ? $('.login_btn').prop('disabled',false): $('#login_btn').prop('disabled',true);
     });
     $('#password').on('keyup', function(event){
-       checkLoginFields() ? $('#login_btn').prop('disabled',false): $('#login_btn').prop('disabled',true);
+       checkLoginFields() ? $('.login_btn').prop('disabled',false): $('#login_btn').prop('disabled',true);
     });
 });

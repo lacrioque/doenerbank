@@ -8,7 +8,7 @@ private $user_id;
 private $user_pass;
 private $user_data;
 private $login = false;
-
+private $time;
 
 /**
  * Konstukter der User Klasse gilt gleichermaßen als Login Klasse
@@ -17,18 +17,40 @@ private $login = false;
  * @param String $user Der Username
  * @param String $pass Das Passwort
  */
-public function __construct($user, $pass){
-    $query = "SELECT id FROM doener_nutzer WHERE user=? and pass=?";
-    $database = new DB();
-    $result = $database->query_values($query,array($user,DB::crypt($pass)));
+public function __construct($user, $pass, $session = false){
+	if($session!== false){
+		$query = "SELECT user_id,passwort,name FROM doener_nutzer WHERE loggedIn = ?";
+		$array = array($session);
+	} else {
+		$query = "SELECT user_id,passwort,name FROM doener_nutzer WHERE name = ? and passwort = ?";
+		$array = array($user,DB::crypt($pass));
+	}
+    $DB = new DB();
+    $result = $DB->query_values($query,$array);
     if($result !== false){
         $this->login = true;
-        $this->user_id = $result[0];
-        $this->user_pass = $pass;
+        $this->user_id = $result[0]['user_id'];
+        $this->user_pass = $result[0]['passwort'];
         $this->getUserData();
+		if(!isset($_SESSION['time'])){
+			$this->time = $_SESSION['time'] = time();
+			
+		} else {
+			$this->time = $_SESSION['time'];
+		}
+		$loginQuery = "UPDATE doener_nutzer SET loggedIn = ? WHERE user_id = ?";
+		$DB->update_values($loginQuery, array($this->sessionCrypt(), $this->user_id));
     } else {
         $this->__destruct();
     }
+}
+
+public function sessionCrypt(){
+	return crypt($this->user_id + $this->user_pass + $this->user_data['name'] + $_SESSION['time']);
+}
+
+public function checkLogin(){
+	return  $this->login;
 }
 
 public function saveToSession($keyValueArr){
@@ -71,4 +93,23 @@ public function getUserBestellungen(){
     return $returner;
 }
 
+public static function registerNew($user, $pass){
+	$DB = new DB();
+	$query = "INSERT INTO doener_nutzer (name,passwort) VALUES(?, ?)";
+	$newID = $DB->insert_values($query, array($user,DB::crypt($pass)));
+	if($newID !== false){
+		return true;
+	} else {
+		return false;
+	}
+}
+public function __destruct(){
+	unset($this->user_id);
+	unset($this->user_pass);
+	unset($this->user_data);
+	unset($this->login);
+	unset($this->time);
+	session_destroy();
+	return NULL;
+}
 }

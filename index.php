@@ -1,17 +1,26 @@
 <!DOCTYPE HTML>
 <?php 
-    include("inc/dbconnect.inc.php");
-    $loggedIn = false;
-?>
-
-<?php 
+    include("inc/doenerbank.php");
+	$loggedIn = false;
+	
+	if($_SESSION['loggedin']){
+		var_dump("alles paletti");
+		$user = new user("","", $_SESSION['loggedIn']);
+		$loggedIn = $user->checkLogin();
+		if($loggedIn){
+			$_SESSION['loggedin'] = $user->sessionCrypt();
+		}
+	}
     if(isset($_POST["username"]) && isset($_POST["password"])){
-        $user = new login($_POST["username"], $_POST["password"]);
-        $loggedIn = false; //$user.checkLogin();
+        $user = new user($_POST["username"], $_POST["password"]);
+        $loggedIn = $user->checkLogin();
+		if($loggedIn){
+			$_SESSION['loggedin'] = $user->sessionCrypt();
+		}
     }
-?>
-<?php
-    
+
+	
+	
     if(isset($_GET["view"])){
         $view = $_GET["view"];
         switch($view){
@@ -99,7 +108,8 @@
                       <span class="add-on"><i class="icon-lock"></i></span>
                       <input class="span2" id="password" type="password" placeholder="Passwort" name="password">
                     </div>    
-                    <button type="submit" id="login_btn" disabled="true" class="btn btn-primary">Login</button>              
+                    <button type="submit" id="login_btn" disabled="true" class="login_btn btn btn-primary">Login</button>              
+                    <button type="button" id="register_btn" disabled="true" class="login_btn btn btn-secondary">Register</button>              
                 </form>
             </div>
     <?php else: ?>        

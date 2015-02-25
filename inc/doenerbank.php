@@ -11,6 +11,7 @@ include 'user.php';
 
 $header = '	<link href="css/bootstrap.min.css" rel="stylesheet">
 			<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+			<link href="css/bootstrap-dialog.css" rel="stylesheet">
 			<link href="css/main.css" rel="stylesheet" type="text/css"/>
 			<link href="css/login.css" rel="stylesheet" type="text/css"/>
 			<link href="css/nav.css" rel="stylesheet" type="text/css"/>';
@@ -24,5 +25,7 @@ $header .="<script src='js/checkLoginForm.js'></script>\n"
 		. "<script src='js/bootstrap.min.js'></script>\n"
 		. "<script src='js/register.js'></script>\n"
 		. "<script src='js/mustache.js'></script>\n"
+		. "<script src='js/bootstrap-dialog.js'></script>\n"
 		. "<script src='js/Artikel.js'></script>\n"
+		. "<script src='js/warenkorb.js'></script>\n"
 		. "<script src='js/index.js'></script>";

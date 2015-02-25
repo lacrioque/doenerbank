@@ -6,7 +6,7 @@ class DB {
 	public static $debug = false;
 	
     private function connect(){
-        $host_name  = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? '127.0.0.1' : "db528830179.db.1and1.com";
+        $host_name  = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? 'localhost' : "db528830179.db.1and1.com";
         $database   = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? "doenerbank" : "db528830179"  ;
         $user_name  = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? "doenermann" : "dbo528830179";
         $password   = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? "all4theD03N3r" : "";

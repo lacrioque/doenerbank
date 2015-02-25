@@ -54,6 +54,7 @@
 </head>
 
 <body>
+    <div id="triggerling" class="hidden">&nbsp;</div>
     <div class="html-mobile-background"></div>
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -88,9 +89,12 @@
             <!-- .nav, .navbar-search, .navbar-form, etc -->
 
           </div>
-		  <span class="pull-right clearfix text-right text-success">
-			  <?php if($loggedIn){echo "Willkommen ".$user->getName();} ?>
-		  </span>
+		  <span class="pull-right clearfix text-right text-success"><?php if($loggedIn){echo "Willkommen ".$user->getName();} ?></span>
+                  <div class="pull-right clearfix warenkorb-container">
+                      <span id="warenkorb-icon-container" class="warenkorb-icon-container"></span>
+                      <div id="warenkorb-vorschau" class="warenkorb-vorschau"></div>
+                  </div>
+                  <script></script>
         </div>
       </div>
     </div>
@@ -123,14 +127,26 @@
             <?php if($view == "order"):?>
                 <h1>Ein Gericht bestellen</h1>
                 <div class="container-fluid" id="artikelliste"></div>
-						
-            
-            <script>Artikel.render($('#artikelliste'));</script>
+                <script>Artikel.render($('#artikelliste'));</script>
             <?php endif ?>
             <?php if($view == "admin"):?>
-            
                 <h1>Administration</h1>
+                <div class="container-fluid" id="administration">
+                    <div class="row control">
+                        <div class="btn-group" role="group">
+                            <button id="submit" class="btn-info">Speichern</button>
+                            <button id="clear" class="btn-info"> Löschen </button>
+                            <button id="print" class="btn-info">Speichern und Drucken</button>
+                        </div>
+                    </div>
+                    <div class="row" id="aktive_user"></div>
+                    <div class="row" id="bestellungen" class="hidden"></div>
+                </div>
+            <?php endif ?>
+            <?php if($view == "uebersicht"):?>
             
+                <h1>Übersicht</h1>
+                
             <?php endif ?>
             
     <?php endif ?>

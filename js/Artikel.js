@@ -22,6 +22,7 @@ var Artikel = {
                 html += '</div>';
             });
             jObject.html(html);
+            $('#triggerling').trigger('artikel_geladen');
         }
         });
     },

@@ -16,19 +16,28 @@ var n = this,
  };
  
 $(document).ready(function(){
-
+var warenkorb = new WARENKORB();
+warenkorb.init();
 $('#register_btn').on('click', function(e){
    e.preventDefault();
    Register.new($('#username').val(), $('#password').val());
 });
 
-$('.artikel-bestellen').on('click',function(e){
-    e.preventDefault();
-    console.log($(this).data('artikelnummer'));
-    WARENKORB.add($(this).data('artikelnummer'));
-});
-
-
 $('.onclick_false').on('click', function(){return false;});
 
+$('#triggerling').on('artikel_geladen', function(){
+    console.log('triggerling: "artikel_geladen"');
+    $('.artikel-bestellen').on('click',function(e){
+        e.preventDefault();
+        console.log($(this).data('artikelnummer'));
+        warenkorb.add($(this).data('artikelnummer'));
+    });
+    $('.artikel-abbestellen').on('click',function(e){
+        e.preventDefault();
+        console.log($(this).data('artikelnummer'));
+        warenkorb.remove($(this).data('artikelnummer'));
+    });
+
 });
+});
+

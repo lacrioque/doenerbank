@@ -37,3 +37,17 @@
     border-radius: 10%;
     width: 50%;
 }
+.warenkorb-icon-container{
+    display: inline-block;
+    padding: 2px;
+    background: hsla(0,0%,95%,0.8);
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+}
+.warenkorb-vorschau{
+    display: none;
+}
+.warenkorb-img>img{
+    height: 38px;
+}

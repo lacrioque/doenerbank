@@ -54,7 +54,7 @@ public function sessionCrypt(){
 	if($this->crypted){
 		return $this->crypted;
 	} else {
-		$this->crypted = crypt($this->user_id + $this->user_pass + $this->user_data['name'] + $_SESSION['time']);
+		$this->crypted = crypt($this->user_id + $this->user_pass + $this->user_data['name'] + $_SESSION['time'],  sha1(time()));
 		return $this->crypted;
 	}
 	}

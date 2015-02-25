@@ -5,12 +5,19 @@ class bestellung{
     private $best_id;
     private $best_data;
 
-    public function __construct(){
-        $this->datum = timestamp();
+    public function __construct( $id = false){
+        $this->datum = time();
         $DB = new DB();
+        if($id = false){
         $query="INSERT INTO doener_tagesestellung (datum,gesamtpreis,bemerkungen) VALUES(?,?,?)";
         $this->best_id = $DB->insert_values($query, array($this->datum, 0.0, ""));
         $this->best_data = array( "datum"=>$this->datum, "gesamtpreis" => 0.0, "bemerkungen" => "");
+        } else {
+        $query="SELECT * FROM doener_tagesestellung";
+        $result =  $DB->query($query);
+        $this->best_data = $result[0];
+        $this->best_id = $this->best_data['id'];
+        }
     }
     
 	public function getBestId(){

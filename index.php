@@ -8,6 +8,7 @@
 		$loggedIn = $user->checkLogin();
 		if($loggedIn){
 			$_SESSION['loggedin'] = $user->sessionCrypt();
+                        $bestellung = new bestellung($_SESSION['best_id']);
 		}
 	}
 	
@@ -17,6 +18,7 @@
 		if($loggedIn){
 			$_SESSION['loggedin'] = $user->sessionCrypt();
 			$_SESSION['user_id'] = $user->getID();
+                        $bestellung = new bestellung();
 		}
     }
 

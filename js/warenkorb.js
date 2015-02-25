@@ -6,7 +6,7 @@ var WARENKORB = function(){
         korb = []; 
     }
     
-    tpl_warenkorb = "{{#artikel}}<div class='warenkorb_artikel'><p>Name : {{name}} <button class='btn-warning pull-right'>-</button></p><p>Preis: {{&preis}}</p></div>{{/artikel}} {{^artikel}}<div class='warenkorb-artikel leer'>Keinen Hunger?</div>{{/artikel}}";
+    tpl_warenkorb = "{{#artikel}}<div class='warenkorb_artikel'><p>Name : {{name}} <button class='remove-article btn-warning pull-right' data-artikel='{{art_id}}'>-</button></p><p>Preis: {{&preis}}</p></div>{{/artikel}} {{^artikel}}<div class='warenkorb-artikel leer'>Keinen Hunger?</div>{{/artikel}}";
     kaufen = "<button id='kaufen' class='btn-primary'>Bestellen</button>";
     icon = $('<span class="warenkorb-img"><img src="/img/warenkorb.png" alt="Warenkorb - Icon" /></span>');
      show = function(){
@@ -28,8 +28,8 @@ var WARENKORB = function(){
         };
         confirm = function(){
             var urldata, url, def = $.Deferred();
-            urldata = JSON.stringify({art_ids: this.korb});
-            url= "/ajax/tagesbestellung.php?";
+            urldata = korb.join('|');
+            url= "/ajax/tagesbestellung.php?bestellung=userconfirm&";
             $.getJSON(url+urldata, function(data){
                 if(data !== undefined){
                     def.resolve(data.success);
@@ -39,10 +39,12 @@ var WARENKORB = function(){
         };
     return {
         init: function(){
+            var self = this;
            $('#warenkorb-icon-container').html(icon);
            $('#warenkorb-icon-container').on('click', function(){
                 show().done(function(articles){
                     var artikel = Mustache.render(tpl_warenkorb, articles);
+                    artikel += "<script>$('#triggerling').trigger('warenkorb_open');</script>";
                     $('#warenkorb_vorschau').html(artikel + kaufen);
                     BootstrapDialog.show({
                         message: artikel,
@@ -65,6 +67,7 @@ var WARENKORB = function(){
                         }
                         ]
                     });
+                    
                 });
             });
         },
@@ -77,7 +80,7 @@ var WARENKORB = function(){
             console.log(korb);
         },
         remove : function(id){
-           korb.splice(this.korb.indexOf(id));
+           korb.splice(korb.indexOf(id));
            sessionStorage.setItem('warenkorb', korb.join(','));
         }
     };

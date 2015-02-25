@@ -25,6 +25,15 @@ $('#register_btn').on('click', function(e){
 
 $('.onclick_false').on('click', function(){return false;});
 
+$('#triggerling').on('warenkorb_open', function(){
+        console.log('waremkorb opened');
+        $('.remove-article').on('click', function(e){
+            console.log('remove-triggered');
+            warenkorb.remove($(this).data('artikel'));
+            $(this).closest('.warenkorb_artikel').fadeOut(400);
+        });
+    });
+
 $('#triggerling').on('artikel_geladen', function(){
     console.log('triggerling: "artikel_geladen"');
     $('.artikel-bestellen').on('click',function(e){
@@ -37,7 +46,7 @@ $('#triggerling').on('artikel_geladen', function(){
         console.log($(this).data('artikelnummer'));
         warenkorb.remove($(this).data('artikelnummer'));
     });
-
 });
+
 });
 

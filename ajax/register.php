@@ -5,8 +5,8 @@ $values = $_GET;
 $out = "";
 if($values['register'] == true && $values['timelock'] == "false"){
 	$DB = new DB();
-	$query = "INSERT INTO doener_nutzer ( name , passwort ) VALUES ( ? , ? )";
-	$newID = $DB->insert_values($query, array($values['user'],DB::crypt($values['pass'])));
+	$query = "INSERT INTO doener_nutzer ( name , passwort, email ) VALUES ( ?, ?, ?)";
+	$newID = $DB->insert_values($query, array($values['user'],DB::crypt($values['pass']), $values['email']));
 	
 	$test = $newID !== false ? true : false;
 	if ($test === true){

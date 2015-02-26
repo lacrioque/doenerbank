@@ -15,14 +15,26 @@ var n = this,
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
  };
  
-$(document).ready(function(){
-var warenkorb = new WARENKORB();
-warenkorb.init();
-$('#register_btn').on('click', function(e){
+ var LOGIN = function(){
+   $('#register_btn').on('click', function(e){
    e.preventDefault();
    Register.new($('#username').val(), $('#password').val());
+   return false;
 });
-
+ };
+ 
+var MAIN = function(){
+var warenkorb = new WARENKORB();
+warenkorb.init();
+$('#logout').on('click',function(e){
+    BootstrapDialog.confirm("Wirklich abmelden?", function(bool){
+        if(bool){ sessionStorage.clear(); location.href = 'logout.php'; }
+        else {
+            return false;
+        }
+    });
+                                
+});
 $('.onclick_false').on('click', function(){return false;});
 
 $('#triggerling').on('warenkorb_open', function(){
@@ -31,8 +43,9 @@ $('#triggerling').on('warenkorb_open', function(){
             console.log('remove-triggered');
             warenkorb.remove($(this).data('artikel'));
             $(this).closest('.warenkorb_artikel').fadeOut(400);
-        });
+           });
     });
+
 
 $('#triggerling').on('artikel_geladen', function(){
     console.log('triggerling: "artikel_geladen"');
@@ -52,5 +65,4 @@ $('#triggerling').on('artikel_geladen', function(){
     });
 });
 
-});
-
+};

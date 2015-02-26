@@ -9,14 +9,21 @@ class bestellung{
         $this->datum = $begin = mktime(0,0,0,date("m"),date("d"),date("Y"));
         $DB = new DB();
         if($id = false){
-        $query="INSERT INTO doener_tagesestellung (datum,gesamtpreis,bemerkungen) VALUES(?,?,?)";
-        $this->best_id = $DB->insert_values($query, array($this->datum, 0.0, ""));
-        $this->best_data = array( "datum"=>$this->datum, "gesamtpreis" => 0.0, "bemerkungen" => "");
+            $query="SELECT datum,gesamtpreis,bemerkungen FROM doener_tagesestellung WHERE datum = ?";
+            $result =  $DB->query_values($query, array($this->datum));
+            if (!$result){
+                $query="INSERT INTO doener_tagesestellung (datum,gesamtpreis,bemerkungen) VALUES(?,?,?)";
+                $this->best_data = array( "datum"=>$this->datum, "gesamtpreis" => 0.0, "bemerkungen" => "");
+                $this->best_id = $DB->insert_values($query, $this->best_data);
+            } else {
+                $this->best_data = $result[0];
+            }
         } else {
-        $query="SELECT * FROM doener_tagesestellung";
-        $result =  $DB->query($query);
-        $this->best_data = $result[0];
-        $this->best_id = $this->best_data['id'];
+            $query="SELECT id,datum,gesamtpreis,bemerkungen FROM doener_tagesestellung WHERE datum = ?";
+            $result =  $DB->query_values($query, array($this->datum));
+            $this->best_data = $result[0];
+            $this->best_id = $this->best_data['id'];
+            unset($this->best_data['id']);
         }
     }
     

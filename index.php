@@ -2,7 +2,7 @@
 <?php 
     include("inc/doenerbank.php");
 	$loggedIn = false;
-	
+	$bestellung = null;
 	if(isset($_SESSION['user_id'])){
 		$user = new user($_SESSION['user_id']);
 		$loggedIn = $user->checkLogin();
@@ -19,6 +19,7 @@
 			$_SESSION['loggedin'] = $user->sessionCrypt();
 			$_SESSION['user_id'] = $user->getID();
                         $bestellung = new bestellung();
+                        $_SESSION['best_id'] = $bestellung->getBestId();
 		}
     }
 
@@ -34,16 +35,18 @@
     }else{
         $view = "order";
     }
+    $adminHint = "";
     if($loggedIn && $user !== NULL){
-    $showAdminHint = false;
 		if($view == "admin"){
 			if(!$user->isAdmin()){
-				$showAdminHint = true;
+                            $adminHint = '
+        <div class="alert alert-error">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>Achtung!</strong> Sie sind nicht als Administrator angemeldet.
+        </div>';
 				$view = "order";
 			}
 		}
-	} else {
-		$showAdminHint = true;
 	}
 ?>
 <html>
@@ -56,6 +59,7 @@
 </head>
 
 <body>
+    <?php echo $adminHint; ?>
     <div id="triggerling" class="hidden">&nbsp;</div>
     <div class="html-mobile-background"></div>
     <div class="navbar navbar-inverse">
@@ -78,16 +82,7 @@
 		<ul class="nav">
             <li><a href="index.php?view=order">Bestellen</a></li>
             <li><a href="index.php?view=admin">Administration</a></li>
-            <li>  
-                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                Logout <span class="caret"></span>
-                          </button>
-                                <ul class="dropdown-menu" role="menu">
-                                        <li>Wirklich ausloggen?</li>
-                                        <li><a href="logout.php">Ja</a></li>
-                                        <li><a href="#" class="onclick_false">Nein</a></li>
-                                </ul>
-                        </li>
+            <li> <button class="btn btn-danger" id="logout">Logout</button></li>
           </ul>  
 		<span class="pull-right clearfix text-right text-success"><?php if($loggedIn){echo "Willkommen ".$user->getName();} ?></span>
                   <div class="pull-right clearfix warenkorb-container">
@@ -100,12 +95,6 @@
     </div>
 
     <div class="container">
-    <?php if($showAdminHint):?>
-        <div class="alert alert-error">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <strong>Achtung!</strong> Sie sind nicht als Administrator angemeldet.
-        </div>
-    <?php endif?>
     <?php if($loggedIn == false):?>
             <div id="login_window">
                 <form method="post">
@@ -120,9 +109,10 @@
                       <input class="span2" id="password" type="password" placeholder="Passwort" name="password">
                     </div>    
                     <button type="submit" id="login_btn" disabled="true" class="login_btn btn btn-primary">Login</button>              
-                    <button id="register_btn" disabled="true" class="register_btn login_btn btn btn-secondary">Register</button>              
+                    <button id="register_btn"  class="register_btn btn btn-secondary">Register</button>              
                 </form>
             </div>
+        <script>LOGIN();</script>
     <?php else: ?>        
             <?php if($view == "order"):?>
                 <h1>Ein Gericht bestellen</h1>
@@ -139,19 +129,19 @@
                             <button id="print" class="btn-info">Speichern und Drucken</button>
                         </div>
                     </div>
-                    <div class="row" id="aktive_user"></div>
+                    <div class="row" id="user"></div>
                     <div class="row" id="bestellungen" class="hidden"></div>
+                    <script>administration.init();</script>
                 </div>
             <?php endif ?>
             <?php if($view == "uebersicht"):?>
-            
                 <h1>Übersicht</h1>
-                
+                <div id="bestelluebersicht" class="container-fluid"></div>
+                <script>uebersicht.init();</script>
             <?php endif ?>
-            
+                <script>MAIN();</script>
     <?php endif ?>
 
     </div>
-
 </body>
 </html>

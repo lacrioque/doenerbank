@@ -71,7 +71,7 @@
      
           <!-- Be sure to leave the brand out there if you want it shown -->
           <a class="brand" href="index.php?view=order">D&ouml;nerbank</a>
-          	  
+		  
           <!-- Everything you want hidden at 940px or less, place within here -->
           <div class="nav-collapse collapse">
             <!-- .nav, .navbar-search, .navbar-form, etc -->
@@ -95,7 +95,7 @@
                       <div id="warenkorb-vorschau" class="warenkorb-vorschau"></div>
                   </div>
           </div>
-	</div>
+        </div>
       </div>
     </div>
 

@@ -71,33 +71,31 @@
      
           <!-- Be sure to leave the brand out there if you want it shown -->
           <a class="brand" href="index.php?view=order">D&ouml;nerbank</a>
-          <ul class="nav">
-            <li><a href="index.php?view=order">Bestellen</a></li>
-            <li><a href="index.php?view=admin">Administration</a></li>
-            <li>  
-				<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-				Logout <span class="caret"></span>
-			  </button>
-				<ul class="dropdown-menu" role="menu">
-					<li>Wirklich ausloggen?</li>
-					<li><a href="logout.php">Ja</a></li>
-					<li><a href="#" class="onclick_false">Nein</a></li>
-				</ul>
-			</li>
-          </ul>  
-		  
+          	  
           <!-- Everything you want hidden at 940px or less, place within here -->
           <div class="nav-collapse collapse">
             <!-- .nav, .navbar-search, .navbar-form, etc -->
-
-          </div>
-		  <span class="pull-right clearfix text-right text-success"><?php if($loggedIn){echo "Willkommen ".$user->getName();} ?></span>
+		<ul class="nav">
+            <li><a href="index.php?view=order">Bestellen</a></li>
+            <li><a href="index.php?view=admin">Administration</a></li>
+            <li>  
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                Logout <span class="caret"></span>
+                          </button>
+                                <ul class="dropdown-menu" role="menu">
+                                        <li>Wirklich ausloggen?</li>
+                                        <li><a href="logout.php">Ja</a></li>
+                                        <li><a href="#" class="onclick_false">Nein</a></li>
+                                </ul>
+                        </li>
+          </ul>  
+		<span class="pull-right clearfix text-right text-success"><?php if($loggedIn){echo "Willkommen ".$user->getName();} ?></span>
                   <div class="pull-right clearfix warenkorb-container">
                       <span id="warenkorb-icon-container" class="warenkorb-icon-container"></span>
                       <div id="warenkorb-vorschau" class="warenkorb-vorschau"></div>
                   </div>
-                  <script></script>
-        </div>
+          </div>
+	</div>
       </div>
     </div>
 

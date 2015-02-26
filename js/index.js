@@ -38,13 +38,17 @@ $('#triggerling').on('artikel_geladen', function(){
     console.log('triggerling: "artikel_geladen"');
     $('.artikel-bestellen').on('click',function(e){
         e.preventDefault();
-        console.log($(this).data('artikelnummer'));
         warenkorb.add($(this).data('artikelnummer'));
+	$(this).addClass('hidden');
+	$(this).closest('.artikel-einzel').find('.artikel-abbestellen').removeClass('hidden');
+
     });
     $('.artikel-abbestellen').on('click',function(e){
         e.preventDefault();
         console.log($(this).data('artikelnummer'));
         warenkorb.remove($(this).data('artikelnummer'));
+	$(this).addClass('hidden');
+	$(this).closest('.artikel-einzel').find('.artikel-bestellen').removeClass('hidden');
     });
 });
 

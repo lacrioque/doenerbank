@@ -6,7 +6,7 @@ class bestellung{
     private $best_data;
 
     public function __construct( $id = false){
-        $this->datum = time();
+        $this->datum = $begin = mktime(0,0,0,date("m"),date("d"),date("Y"));
         $DB = new DB();
         if($id = false){
         $query="INSERT INTO doener_tagesestellung (datum,gesamtpreis,bemerkungen) VALUES(?,?,?)";

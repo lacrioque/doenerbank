@@ -32,10 +32,10 @@
     font-size: 110%;
     color: darkred;
 }
-.artikel-einzel>.artikel-bestellen{
+.artikel-einzel>.artikel-interaktion{
     padding: 2px 14px;
     border-radius: 10%;
-    width: 50%;
+    width: 70%;
 }
 .warenkorb-icon-container{
     display: inline-block;

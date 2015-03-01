@@ -8,7 +8,9 @@
 		$loggedIn = $user->checkLogin();
 		if($loggedIn){
 			$_SESSION['loggedin'] = $user->sessionCrypt();
-                        $bestellung = new bestellung($_SESSION['best_id']);
+                        $bestellung = new bestellung();
+                        $_SESSION['best_id'] = $bestellung->getBestId();
+                        varDump($_SESSION);
 		}
 	}
 	
@@ -20,6 +22,7 @@
 			$_SESSION['user_id'] = $user->getID();
                         $bestellung = new bestellung();
                         $_SESSION['best_id'] = $bestellung->getBestId();
+                        varDump($_SESSION);
 		}
     }
 
@@ -30,6 +33,7 @@
         switch($view){
             case "order": $view = "order"; break;
             case "admin": $view = "admin"; break;
+            case "uebersicht": $view = "uebersicht"; break;
             default: $view = "order";
         }
     }else{
@@ -53,7 +57,7 @@
 <head>
 	<meta charset="utf-8"/>
 	<meta name="author" content="Steffen Pfeil - ITFU1" />
-	<title>ITFU1 - Döner</title>
+	<title>ITFU1 - Doener</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php echo $header ?>
 </head>
@@ -83,12 +87,18 @@
             <li><a href="index.php?view=order">Bestellen</a></li>
             <li><a href="index.php?view=admin">Administration</a></li>
             <li> <button class="btn btn-danger" id="logout">Logout</button></li>
-          </ul>  
-		<span class="pull-right clearfix text-right text-success"><?php if($loggedIn){echo "Willkommen ".$user->getName();} ?></span>
-                  <div class="pull-right clearfix warenkorb-container">
+          </ul> 
+            <div class="span2 pull-right clearfix">
+		<div class="text-success">
+                    <?php if($loggedIn){echo "Willkommen ".$user->getName();} ?>
+                    <span class="" id="warenkorb"></span> 
+                </div>
+                 
+                <div class="warenkorb-container pull-right clearfix">
                       <span id="warenkorb-icon-container" class="warenkorb-icon-container"></span>
                       <div id="warenkorb-vorschau" class="warenkorb-vorschau"></div>
-                  </div>
+                </div>
+            </div>
           </div>
         </div>
       </div>
@@ -136,7 +146,14 @@
             <?php endif ?>
             <?php if($view == "uebersicht"):?>
                 <h1>Übersicht</h1>
-                <div id="bestelluebersicht" class="container-fluid"></div>
+                <div id="bestelluebersicht" class="container-fluid bestelluebersicht"></div>
+                <div class='row' id='uebersicht_preis'>
+                    <p class='span3 offset7 gesamtpreis_uebersicht'> <span id='gesamtpreis_uebersicht'>0.00</span>€ </p>
+                </div>
+                <div class='row text-right' id='uebersicht_kontrolle'>
+                    <button class='btn btn-inverse' id='uebersicht_zuruecksetzen'>Abbrechen</button>
+                    <button class='btn btn-primary' id='uebersicht_confirm'>Bestätigen</button>
+                </div>
                 <script>uebersicht.init();</script>
             <?php endif ?>
                 <script>MAIN();</script>

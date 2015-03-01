@@ -12,6 +12,15 @@ var Register = {
     new : function(user,pass){
         var self = this, data = this.extradata, popup_active = this.popup, durl, registerDialog;
         registerDialog = "<form class='container-fluid'>\
+        <div class='row-fluid passwortfehler nichtgleich' style='display: none;' >\
+            <p class='span10 text-error'>Passwörter stimmen nicht überein</p>\
+        </div>\
+        <div class='row-fluid passwortfehler zukurz' style='display: none;' >\
+            <p class='span10 text-error'>Passwort zu kurz. Bitte mindestens 8 Zeichen.</p>\
+        </div>\
+        <div class='row-fluid roboteralarm' style='display: none;' >\
+            <p class='span10 text-error'>Bist du wirklich ein Roboter?.</p>\
+        </div>\
         <div class='row-fluid' >\
             <label class='span4' for='register_name'>Nutzername</label>\
             <input name='name' id='register_name' class='span8' disabled value='{{name}}' />\
@@ -20,19 +29,17 @@ var Register = {
             <label class='span4' for='register_pass'>Passwort</label>\
             <input name='passwort' id='register_pass' class='span8' disabled type='password' value='{{passwort}}' />\
         </div>\
-        <div id='passwortfehler' class='row-fluid hidden' > \
-            <p class='passwortfehler span10 text-error'>Passwörter stimmen nicht überein</p>\
-        </div><div class='row-fluid'>\
+        <div class='row-fluid'>\
             <label class='span4' for='register_pass_confirm'>Passwort bestätigen</label>\
             <input name='passwort' id='register_pass_confirm' class='span8'  type='password' />\
         </div>\
         <div class='row-fluid' > \
             <label class='span4' for='register_email'>Email Adresse</label>\
-            <input name='email' type='email' class='span8' />\
+            <input name='email' type='email' id='register_email' class='span8' />\
         </div>\
         <div class='row-fluid' > \
-            <label class='span4' for='human'>Roboter?</label>\
-            <input name='robot' id='iamnotahuman' type='checkbox' class='span8' />\
+            <label class='span4' for='human'>Bist du ein Roboter?</label>\
+            <input name='robot' id='iamnotahuman' type='checkbox' checked class='span8' />\
         </div>\
         </form>";
         var dialog = BootstrapDialog.show({
@@ -44,14 +51,24 @@ var Register = {
                     cssClass: "btn btn-primary",
                     action: function(dialogItself){
                         var form_cont = dialogItself.getModalBody();
-                        if($('#iamnotahuman').val() == true)
-                        if($('#register_pass_confirm').val() != pass){
-                            form_cont.find('#passwortfehler').removeClass('hidden');
+                        if($('#iamnotahuman').prop('checked') === true){
+                            $('.roboteralarm').fadeIn(400);
+                            setTimeout(function(){$('.roboteralarm').fadeOut(800);}, 1500);
                             return false;
                         }
-                        data.email = form_cont.find('input[type=email]').val();
-                        data.user = user;
-                        data.pass = pass;
+                        if($('#register_pass_confirm').val() !== $('#register_pass').val()){
+                            $('.passwortfehler.nichtgleich').fadeIn(400);
+                            setTimeout(function(){$('.passwortfehler.nichtgleich').fadeOut(800);}, 1500);
+                            return false;
+                        }
+                        if($('#register_pass').val().length < 8) {
+                            $('.passwortfehler.zukurz').fadeIn(400);
+                            setTimeout(function(){$('.passwortfehler.zukurz').fadeOut(800);}, 1500);
+                            return false;
+                        }
+                        data.email = $('#register_email').val();
+                        data.user = $('#register_name').val();
+                        data.pass = $('#register_pass').val();
                         data.timelock = self.checktime();
                         durl = self.url + "?" + $.param(data);
                         $.getJSON(durl, function(data){

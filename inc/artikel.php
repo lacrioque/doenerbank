@@ -23,5 +23,13 @@ class artikel{
     public function name(){ return $this->name; }
     public function beschreibung() {return $this->beschreibung; }
     public function kategorie() { return $this->kategorie; }
-
+    public function getArtikelData(){
+        return array(
+            'art_id' => $this->art_id,
+            'name' => $this->name,
+            'preis' => $this->preis,
+            'kategorie' => $this->kategorie,
+            'beschreibung' => $this->beschreibung
+        );
+    }
 }

@@ -37,31 +37,40 @@ $('#logout').on('click',function(e){
 });
 $('.onclick_false').on('click', function(){return false;});
 
+$('#triggerling').on('artikel_reload', function(){
+    console.log('Triggerling: artikel_reload');
+    Artikel.refresh();
+});
+
 $('#triggerling').on('warenkorb_open', function(){
-        console.log('waremkorb opened');
         $('.remove-article').on('click', function(e){
-            console.log('remove-triggered');
             warenkorb.remove($(this).data('artikel'));
+            var preis_item = $(this).closest('.warenkorb_artikel').find('.artikel_preis'),
+            preis = (preis_item.html()).replace(',','.'),
+            gesamtPreis = ($('#gesamtPreis_warenkorb').html()).replace(',','.'),
+            newGesamtPreis = gesamtPreis-preis;
+            $('#gesamtPreis_warenkorb').html(newGesamtPreis.formatMoney(2,',','.'));
             $(this).closest('.warenkorb_artikel').fadeOut(400);
+            var artikel_id = "#artikel_"+$(this).data('artikel');
+            Artikel.artikel_aus_warenkorb(artikel_id);
            });
     });
 
-
 $('#triggerling').on('artikel_geladen', function(){
-    console.log('triggerling: "artikel_geladen"');
+    warenkorb.refresh_artikel();
     $('.artikel-bestellen').on('click',function(e){
+        $('#warenkorb').trigger('change');
         e.preventDefault();
         warenkorb.add($(this).data('artikelnummer'));
-	$(this).addClass('hidden');
-	$(this).closest('.artikel-einzel').find('.artikel-abbestellen').removeClass('hidden');
-
+        var artikel_id = "#artikel_"+$(this).data('artikelnummer');
+        Artikel.artikel_in_warenkorb(artikel_id)
     });
     $('.artikel-abbestellen').on('click',function(e){
+        $('#warenkorb').trigger('change');
         e.preventDefault();
-        console.log($(this).data('artikelnummer'));
         warenkorb.remove($(this).data('artikelnummer'));
-	$(this).addClass('hidden');
-	$(this).closest('.artikel-einzel').find('.artikel-bestellen').removeClass('hidden');
+        var artikel_id = "#artikel_"+$(this).data('artikelnummer');
+        Artikel.artikel_aus_warenkorb(artikel_id);
     });
 });
 

@@ -30,7 +30,8 @@ CREATE TABLE doener_artikelliste (
 CREATE TABLE doener_einzelbestellung (
 	ebest_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	user_id INT NOT NULL,
-	best_id INT NOT NULL
+	best_id INT NOT NULL,
+        ebest_preis DOUBLE NOT NULL DEFAULT '0.0'
 );
 
 /**

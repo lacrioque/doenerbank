@@ -3,7 +3,7 @@
 
 class DB {
     
-	public static $debug = false;
+	public static $debug = true;
 	
     private function connect(){
         $host_name  = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? 'localhost' : "db528830179.db.1and1.com";
@@ -24,7 +24,7 @@ class DB {
         try{
             $prep = $conn->prepare($query);
             $prep->execute(array());
-			if(DB::$debug === true ){var_dump($this->showQuery($query,array()));}
+			if(DB::$debug === true ){varDump($this->showQuery($query,array()));}
             $result = $prep->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             if(DB::$debug === true ){var_dump($e->getMessage());}
@@ -36,8 +36,8 @@ class DB {
         $conn = $this->connect();
         try{
             $prep = $conn->prepare($query);
-			//if(DB::$debug === true ){var_dump($this->showQuery($query,$value_array));}
-			$prep->execute($value_array);
+            if(DB::$debug === true ){varDump($this->showQuery($query,$value_array));}
+            $prep->execute($value_array);
             $result = $prep->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             if(DB::$debug === true ){var_dump($e->getMessage());}
@@ -54,7 +54,7 @@ class DB {
             if($delta_rows === false){return false;}
             $lastID = $conn->lastInsertId();
         } catch (PDOException $e) {
-            if(DB::$debug === true ){var_dump($e->getMessage());}
+            if(DB::$debug === true ){varDump($e->getMessage());}
         }
         return $lastID;
     }
@@ -69,13 +69,13 @@ class DB {
                 $query = preg_replace("/[?]/",$value,$query,1);
             }
         }
-		if(DB::$debug === true ){var_dump($query);}
+		if(DB::$debug === true ){varDump($query);}
         try{
             $delta_rows = $conn->exec($query);
             if($delta_rows === false){return false;}
             $lastID = $conn->lastInsertId();
         } catch (PDOException $e) {
-            if(DB::$debug === true ){var_dump($e->getMessage());}
+            if(DB::$debug === true ){varDump($e->getMessage());}
         }
         
         return $lastID;
@@ -87,7 +87,7 @@ class DB {
             $delta_rows = $conn->exec($query);
             if($delta_rows === false){return false;}
         } catch (PDOException $e) {
-            if(DB::$debug === true ){var_dump($e->getMessage());}
+            if(DB::$debug === true ){varDump($e->getMessage());}
         }
         return $delta_rows;
     }
@@ -101,12 +101,12 @@ class DB {
                 $query = preg_replace("/[?]/",$value,$query,1);
             }
         }
-		 if(DB::$debug === true ){var_dump($query);}
+		 if(DB::$debug === true ){varDump($query);}
         try{
             $delta_rows = $conn->exec($query);
             if($delta_rows === false){return false;}
         } catch (PDOException $e) {
-            if(DB::$debug === true ){var_dump($e->getMessage());}
+            if(DB::$debug === true ){varDump($e->getMessage());}
         }
         
         return $delta_rows;

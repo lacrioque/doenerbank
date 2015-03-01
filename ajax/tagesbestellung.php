@@ -9,16 +9,11 @@ include("../inc/einzelbestellung.php");
 if(!isset($_SESSION['loggedin'])){die(json_encode(array("success"=>"false")));}
 $values = $_GET;
 $out = "";
-global $bestellung;
-if($values['bestellung']=='userconfirm'){
-        $einige_artikel = explode('|',$values['art_ids']);
-	$einzelbestellung = new einzelbestellung();
-	$artikel = $DB->query($query);
-        $out_data = array();
-        foreach($artikel as $i => $artikel_einzel){
-            $out_data[] = $artikel_einzel;
-        }
-	$out = json_encode(array('success' => true, "artikelarray" => array('artikel'=>$out_data)));
+if($values['bestellung']=='uebersicht'){
+	$einzelbestellung = new einzelbestellung( $_SESSION['best_id'], $_SESSION['user_id']);
+        varDump($einzelbestellung);
+	$artikel = $einzelbestellung->getArtikel();
+	$out = json_encode(array('success' => true, "artikelarray" => array('artikel'=>$artikel)));
 }
 
 die($out);

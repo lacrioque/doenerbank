@@ -1,24 +1,37 @@
 var WARENKORB = function(){
-    var icon, inhalt, kaufen, tpl_warenkorb, kasse, korb, confirm, show;
+    var icon, inhalt, kaufen, tpl_preis, tpl_warenkorb, kasse, korb, confirm, clear, show;
     if(sessionStorage.getItem('warenkorb') !== null){
         korb = sessionStorage.getItem('warenkorb').split(',');
+        if(korb[0] === "" || korb[0] === "null" || korb === "null"){
+            korb = [];
+            sessionStorage.setItem('warenkorb',null);
+        }
     } else { 
         korb = []; 
+        sessionStorage.setItem('warenkorb',null);
     }
     
-    tpl_warenkorb = "{{#artikel}}<div class='warenkorb_artikel'><p>Name : {{name}} <button class='remove-article btn-warning pull-right' data-artikel='{{art_id}}'>-</button></p><p>Preis: {{&preis}}</p></div>{{/artikel}} {{^artikel}}<div class='warenkorb-artikel leer'>Keinen Hunger?</div>{{/artikel}}";
-    kaufen = "<button id='kaufen' class='btn-primary'>Bestellen</button>";
+    tpl_warenkorb = "{{#artikel}}\
+<div class='warenkorb_artikel'>\
+<p>Name : {{name}} <button class='remove-article btn-warning pull-right' data-artikel='{{art_id}}'>-</button></p>\
+<p>Preis: {{&html_preis}}</p>\
+</div>{{/artikel}} \
+{{^artikel}}<div class='warenkorb-artikel leer'>Keinen Hunger?</div>{{/artikel}}";
+    tpl_preis = "<p class='row-fluid'><span class='span4 offest6 pull-right clearfix'>Gesamtpreis: {{&preis}} </span></p>";
+    kaufen = "<p class='row-fluid'>\
+                <label for'bestellung_bemerkung' class='span3'>Anmerkungen zur Bestellung?</label>\
+                <textarea class='span6' id='bestellung_bemerkungen'></textarea></p>";
     icon = $('<span class="warenkorb-img"><img src="/img/warenkorb.png" alt="Warenkorb - Icon" /></span>');
      show = function(){
             console.log('show');
             var urldata, url, def = $.Deferred();
-            urldata = korb.join('|')
+            urldata = korb.join('|') == "null" ? "" : korb.join('|');
             url= "/ajax/artikel.php?artikel=einige&art_ids=";
             console.log(url+urldata);
             $.getJSON(url+urldata, function(data){
                 if(data !== undefined){
                     if(data.success == true){
-                        def.resolve(data.artikelarray);
+                        def.resolve(data.artikelarray, data.gesamtPreis);
                     } else {
                         def.resolve(false);
                     }
@@ -26,13 +39,23 @@ var WARENKORB = function(){
             });
             return def;
         };
+        clear = function(){
+            var urldata, url, def = $.Deferred();
+            url= "/ajax/artikel.php?artikel=clear";
+            $.getJSON(url, function(data){
+                if(data !== undefined){
+                    def.resolve(data.success);
+                }
+            });
+            return def;
+        };
         confirm = function(){
             var urldata, url, def = $.Deferred();
             urldata = korb.join('|');
-            url= "/ajax/tagesbestellung.php?bestellung=userconfirm&";
+            url= "/ajax/artikel.php?artikel=confirm&korb=";
             $.getJSON(url+urldata, function(data){
                 if(data !== undefined){
-                    def.resolve(data.success);
+                    def.resolve(data);
                 }
             });
             return def;
@@ -41,28 +64,62 @@ var WARENKORB = function(){
         init: function(){
             var self = this;
            $('#warenkorb-icon-container').html(icon);
+           $('#warenkorb').on('change', function(){
+               $(this).html("Artikel im Korb: " + korb.length);
+           });
            $('#warenkorb-icon-container').on('click', function(){
-                show().done(function(articles){
+                show().done(function(articles, gesamtPreis){
+                        $.each(articles.artikel, function(i,article){
+                            if(article.preis != undefined){
+                                article.html_preis = "<span class='artikel_preis'>"+parseFloat(article.preis).formatMoney(2,',','.')+"</span>€";
+                            }
+                        });
                     var artikel = Mustache.render(tpl_warenkorb, articles);
                     artikel += "<script>$('#triggerling').trigger('warenkorb_open');</script>";
-                    $('#warenkorb_vorschau').html(artikel + kaufen);
+                    artikel += Mustache.render(tpl_preis, {gesamtPreis: gesamtPreis, preis: function(){return "<span id='gesamtPreis_warenkorb' class='preis'>"+parseFloat(this.gesamtPreis).formatMoney(2,',','.')+"</span>€"}})
+                    artikel += korb.length > 0 ? kaufen : "";  
                     BootstrapDialog.show({
                         message: artikel,
+                        closable: false,
                         buttons: [
                         {
                             label: "Zurück",
                             cssClass: "btn-warning",
-                            action: function(dialogItself){dialogItself.close();}
+                            action: function(dialogItself){
+                                $('#triggerling').trigger('artikel_reload');
+                                $('#warenkorb').trigger('change');
+                                dialogItself.close();
+                            }
                         }, 
+                        {
+                            label: "Warenkorb leeren",
+                            cssClass: "btn-error",
+                            action: function(dialogItself){
+                                sessionStorage.setItem('warenkorb', null);
+                                korb = [];
+                                clear().done(function(data){
+                                    var body = dialogItself.getModalBody();
+                                    body.find('div').html(data.message);
+                                    $('#triggerling').trigger('artikel_reload');
+                                    $('#warenkorb').trigger('change');
+                                    dialogItself.close();
+                                });
+                            }
+                        },
                         {
                             label: "Kaufen",
                             cssClass: "btn-primary",
-                            action: function(){
+                            action: function(dialogItself){
                                 confirm().done(
-                                        function(bool){
-                                    bool ? location.href = 'index.php?view=uebersicht' : null;
-                                        }
-                                        );
+                                        function(data){
+                                            if(data.success){
+                                                location.href = 'index.php?view=uebersicht';
+                                            } else {
+                                                $('#triggerling').trigger('artikel_reload');
+                                                $('#warenkorb').trigger('change');
+                                                dialogItself.close();
+                                            }
+                            });
                             }
                         }
                         ]
@@ -75,13 +132,23 @@ var WARENKORB = function(){
             return korb.length;
         },
         add : function(id){
-            korb.push(id);
+            korb.push(id.toString());
             sessionStorage.setItem('warenkorb', korb.join(','));
-            console.log(korb);
         },
         remove : function(id){
            korb.splice(korb.indexOf(id));
-           sessionStorage.setItem('warenkorb', korb.join(','));
+           if(korb === [""]){ 
+               sessionStorage.setItem('warenkorb', null);
+               korb = [];
+           } else {
+               sessionStorage.setItem('warenkorb', korb.join(','));
+           }
+        },
+        refresh_artikel: function(){
+            for(var i=0, j=korb.length; i<j; i++){
+                var article_id = '#artikel_'+korb[i];
+                Artikel.artikel_in_warenkorb($(article_id));
+            }
         }
     };
 };

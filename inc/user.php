@@ -91,23 +91,10 @@ public function getUserData(){
 
 public function getUserBestellungen(){
     $DB = new DB();
-    $query_bestid = "SELECT best_id,datum FROM doener_tagesestellung WHERE datum = (SELECT MAX(datum) FROM Tagesestellung)";
-    $best_id = $DB->query($query_bestid);
-    $query_ebestid = "SELECT ebest_id FROM doener_einzelbestellung  WHERE user_id=? and best_id=?";
-    $ebest_ids = $DB->query_values($query_ebestid,array($this->user_id, $best_id[0]['best_id']));
-    $query_bestellung = "SELECT 
-        art.name as artikelname, 
-        art.preis as artikelpreis, 
-        art.kategorie as artikelkategorie, 
-        art.beschreibung as artikelbeschreibung
-        FROM doener_artikelliste al 
-        JOIN doener_artikel art 
-        ON al.art_id = art.art_id
-        WHERE ebest_id=?";
-        $artikel=array();
-    foreach($ebest_ids[0] as $ebest_id){
-        $artikel[]=$DB->query_values($query_bestellung, array($ebest_id));
-    }
+    $bestellung = new bestellung();
+    $einzelbestellung = new einzelbestellung($bestellung->getBestId(), $this->user_id);
+    $query_bestellung = "SELECT * FROM `user_bestellung` WHERE ebest_id=?";
+    $artikel=$einzelbestellung->getArtikel();
     $returner = array("datum"=>$best_id[0]['datum'], "artikel"=>$artikel);
     return $returner;
 }

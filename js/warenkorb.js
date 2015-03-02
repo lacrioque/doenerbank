@@ -119,18 +119,20 @@ var WARENKORB = function(){
                                     body.find('div').html(data.message);
                                     $('#triggerling').trigger('artikel_reload');
                                     $('#warenkorb').trigger('change');
+                                    //location.reload();
+                                    location.href= "index.php?view=order";
                                     dialogItself.close();
                                 });
                             }
                         },
-						{
-							label:"Das von letztes Mal",
-							cssClass: "btn-warn",
-							action: function(dialogItself){
-								dialogItself.close();
-								$('#triggerling').trigger('von_gestern');
-							}
-						},
+                        {
+                                label:"Das von letztes Mal",
+                                cssClass: "btn-warn",
+                                action: function(dialogItself){
+                                        dialogItself.close();
+                                        $('#triggerling').trigger('von_gestern');
+                                }
+                        },
                         {
                             label: "Kaufen",
                             cssClass: "btn-primary",

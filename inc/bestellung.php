@@ -35,49 +35,22 @@ class bestellung{
             return false;
         }
     }
-    
-	public function bemerkungDazu($bemerkung){
-		$this->best_data['bemerkungen'] += $bemerkung."|";
-		$this->saveAenderung();
-	}
 	
     public function saveAenderung(){
         $DB = new DB();
-        $query = "UPDATE doener_tagesestellung SET gesamtpreis=?, bemerkungen=? WHERE best_id = ".$this->best_id;
-		$array = array($this->best_data['gesamtpreis'],$this->best_data['bemerkungen']);
+        $query = "UPDATE doener_tagesbestellung SET gesamtpreis=?, WHERE best_id = ".$this->best_id;
+		$array = array($this->best_data['gesamtpreis']);
         $DB->update_values($query, $array);
     }
     
     public function showTagesbestellung(){
         $DB = new DB();
-        $query = "SELECT a.name as Artikelname,a.preis as Artikelpreis
-        n.name Nutzer, tb.datum as datum, eb.preis, eb.ebest_id as NutzerGesamt 
-        FROM doener_tagesbestellung tb
-        JOIN doener_einzelbestellung eb ON tb.best_id = eb.best_id
-        JOIN doener_nutzer n ON eb.user_id = n.user_id
-        JOIN doener_artikelliste al ON eb.ebest_id = al.ebest_id
-        JOIN doener_artikel a ON al.art_id = a.art_id
-        ORDER BY ebest_id";
-        
+        $query = "SELECT * FROM bestellung_gesamt WHERE datum = ".$this->datum;
         $tagesWerk = $DB->query($query);
         return $tageswerk;
     }
     
 	public function getLetzteBestellung(){
 		return ($this->best_id-1);
-	}
-	
-	public function showBemerkungen($wann=false){
-		if(!$wann){
-			$bemerkungen_formatted = explode("|", $this->best_data['bemerkungen']);
-			return $bemerkungen_formatted;
-		} else {
-			$DB = new DB();
-			$query = "SELECT bemerkungen FROM doener_tagesestellung WHERE datum = ?";
-			$bemerkungen = $DB->query_values($query, array($wann));
-			$bemerkungen_formatted = empty($bemerkungen) || !$bemerkungen ? "" : explode("|", $bemerkungen);
-			return $bemerkungen_formatted;
-		}
-		
 	}
 }

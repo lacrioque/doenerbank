@@ -8,7 +8,7 @@ class einzelbestellung {
 
     public function __construct($best_id, $user_id){
         $DB = new DB();
-        $query_ebest = "SELECT ebest_id FROM doener_einzelbestellung WHERE best_id = ? AND user_id = ?";
+        $query_ebest = "SELECT ebest_id,preis FROM doener_einzelbestellung WHERE best_id = ? AND user_id = ?";
         $return = $DB->query_values($query_ebest, array($best_id, $user_id));
         if($this->debug){varDump($return);}
         if($return === false){
@@ -127,7 +127,7 @@ class einzelbestellung {
 	
 	public function saveAenderung(){
         $DB = new DB();
-        $query = "UPDATE doener_einzelbestellung SET ebest_preis=? WHERE ebest_id = ".$this->ebest_id;
+        $query = "UPDATE doener_einzelbestellung SET preis=? WHERE ebest_id = ".$this->ebest_id;
         $DB->update_values($query, array($this->ebest_preis));
         return $this->ebest_preis;
     }

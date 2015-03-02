@@ -147,14 +147,13 @@
             <?php if($view == "uebersicht"):?>
                 <h1>Übersicht</h1>
                 <div id="bestelluebersicht" class="container-fluid bestelluebersicht"></div>
-                <div class='row-fluid' id='uebersicht_bemerkung'>
-					<textarea id="uebersicht_bestellung_bemerkung" class="span10 offest1">
-						Besonderes?
-					</textarea>
-				</div>
-                <div class='row-fluid' id='uebersicht_preis'>
-                    <p class='span3 offset7 gesamtpreis_uebersicht'> <span id='gesamtpreis_uebersicht'>0.00</span>€ </p>
+				<div class='row-fluid' id='uebersicht_preis'>
+                    <p class='span2 offset10 gesamtpreis_uebersicht'> <span id='gesamtpreis_uebersicht'>0.00</span>€ </p>
                 </div>
+                <div class='row-fluid' id='uebersicht_bemerkung'>
+					<textarea id="uebersicht_bestellung_bemerkung" class="span10 offset2">Besonderes?</textarea>
+				</div>
+                
                 <div class='row-fluid text-right' id='uebersicht_kontrolle'>
                     <button class='btn btn-inverse' id='uebersicht_liste_leeren'>Abbrechen</button>
                     <button class='btn btn-primary' id='uebersicht_bestaetigen'>Bestätigen</button>

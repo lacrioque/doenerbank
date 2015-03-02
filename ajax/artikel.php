@@ -3,7 +3,7 @@ session_start();
 if(!isset($_SESSION['user_id'])){
 die('{"success": "false", "message": "Nicht eigeloggt, bitte einloggen!"}');
 }
-//ini_set('display_errors', '1');
+ini_set('display_errors', '0');
 ini_set('memory_limit', '-1');
 ini_set('max_execution_time', '123455678');
 require_once("../inc/defines.php");
@@ -57,6 +57,7 @@ else if($values['artikel']=='einige'){
         }
     $gesamtPreis = $objBestellung->saveAenderung();
     $out = json_encode(array('success' => true, "gesamtPreis"=>$gesamtPreis, "artikellisten" => $artikellisten));
+	
 } else if($values['artikel']=='clear'){
     $objBestellung->clear_articles();
     $out=json_encode(array("success" => true, "message"=> "Bestellungen zurückgesetzt"));

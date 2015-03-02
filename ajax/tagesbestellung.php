@@ -1,5 +1,6 @@
 <?php
 session_start();
+ini_set('display_errors', '0');
 ini_set('memory_limit', '-1');
 ini_set('max_execution_time', '123455678');
 require_once("../inc/defines.php");
@@ -12,7 +13,7 @@ $out = "";
 if($values['bestellung']=='uebersicht'){
 	$einzelbestellung = new einzelbestellung( $_SESSION['best_id'], $_SESSION['user_id']);
         $einzelbestellung->getArtikellisten();
-        varDump($einzelbestellung);
+        varDump($_SESSION);
 	$artikel = $einzelbestellung->getArtikel();
 	$out = json_encode(array('success' => true, "artikelarray" => array('artikel'=>$artikel)));
 }

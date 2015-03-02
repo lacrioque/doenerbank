@@ -16,10 +16,10 @@ var uebersicht = {
     artikel_tpl : " {{#artikel}}\
                     <div class='row-fluid'>\
                     <div class='span2'>{{name}}</div>\
-                    <div class='span2'>{{beschreibung}}</div>\
+                    <div class='span3'>{{beschreibung}}</div>\
                     <div class='span2'>{{kategorie}}</div>\
-                    <div class='span1'><input class='span1' id='menge_{{art_id}}' type='number' min='0' max='8' step='1' value='1' name='menge_{{art_id}}' /></div>\
-                    <div class='span1'>{{&html_preis}}</div>\
+                    <div class='span2'><input class='span12' id='menge_{{art_id}}' type='number' min='0' max='8' step='1' value='1' name='menge_{{art_id}}' /></div>\
+                    <div class='span2'>{{&html_preis}}</div>\
                     <div class='span1'><button class='artikel_entfernen btn-warning pull-right' data-artikel='{{art_id}}'>-</button></div>\
                     </div>\
                     {{/artikel}}\

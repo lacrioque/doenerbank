@@ -73,5 +73,5 @@ $('#triggerling').on('artikel_geladen', function(){
         Artikel.artikel_aus_warenkorb(artikel_id);
     });
 });
-
+$('#warenkorb').trigger('change');
 };

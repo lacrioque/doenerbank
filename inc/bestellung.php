@@ -63,6 +63,10 @@ class bestellung{
         return $tageswerk;
     }
     
+	public function getLetzteBestellung(){
+		return ($this->best_id-1);
+	}
+	
 	public function showBemerkungen($wann=false){
 		if(!$wann){
 			$bemerkungen_formatted = explode("|", $this->best_data['bemerkungen']);

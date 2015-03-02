@@ -45,6 +45,10 @@ $('#triggerling').on('remove_from_warenkorb', function(artikelnummer){
 	warenkorb.remove(artikelnummer);
 });
 
+$('#triggerling').on('von_gestern', function(){
+	warenkorb.vonGestern();
+});
+
 $('#triggerling').on('warenkorb_open', function(){
         $('.remove-article').on('click', function(e){
             warenkorb.remove($(this).data('artikel'));

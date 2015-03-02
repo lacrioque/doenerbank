@@ -61,6 +61,14 @@ class einzelbestellung {
         
     }
     
+	public function getLetzteBestellung(){
+		$bestellung = new bestellung();
+		$lastBestID = $bestellung->getLetzteBestellung();
+		$lastEbest = new einzelbestellung($lastBestID, $_SESSION['user_id']);
+		$lastEbest->clean_articles();
+		return array('artikelnr' =>$lastEbest->getArtikel(), 'gesamtPreis'=>$lastEbest->getGesamtPreis());
+	}
+	
     public function clean_articles(){
         $this->getArtikellisten();
         $preis = 0.0;

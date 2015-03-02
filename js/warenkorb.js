@@ -1,5 +1,5 @@
 var WARENKORB = function(){
-    var icon, inhalt, kaufen, tpl_preis, tpl_warenkorb, kasse, korb, confirm, clear, show;
+    var icon, inhalt, kaufen, getLast, tpl_preis, tpl_warenkorb, kasse, korb, confirm, clear, show;
     if(sessionStorage.getItem('warenkorb') !== null){
         korb = sessionStorage.getItem('warenkorb').split(',');
         if(korb[0] === "" || korb[0] === "null" || korb === "null"){
@@ -22,16 +22,32 @@ var WARENKORB = function(){
                 <label for'bestellung_bemerkung' class='span3'>Anmerkungen zur Bestellung?</label>\
                 <textarea class='span6' id='bestellung_bemerkungen'></textarea></p>";
     icon = $('<span class="warenkorb-img"><img src="/img/warenkorb.png" alt="Warenkorb - Icon" /></span>');
+	
+	getLast = function(){
+		var urldata, url, def = $.Deferred();
+            url= "/ajax/tagesbestellung.php?bestellung=letzte";
+            $.getJSON(url, function(data){
+				if(data.success == true){
+					if(data.noBest === true){
+						def.resolve({noBest: true});
+					} else {
+                        def.resolve(data.artikelnr, data.gesamtPreis);
+					}
+				} else {
+					def.resolve(false);
+				}
+			});
+			return def;
+	};
+	
      show = function(){
-            console.log('show');
             var urldata, url, def = $.Deferred();
             urldata = korb.join('|') == "null" ? "" : korb.join('|');
             url= "/ajax/artikel.php?artikel=einige&art_ids=";
-            console.log(url+urldata);
             $.getJSON(url+urldata, function(data){
                 if(data !== undefined){
                     if(data.success == true){
-                        def.resolve(data.artikelarray, data.gesamtPreis);
+                        def.resolve(data.artikelarray);
                     } else {
                         def.resolve(false);
                     }
@@ -68,7 +84,7 @@ var WARENKORB = function(){
                $(this).html("Artikel im Korb: " + korb.length);
            });
            $('#warenkorb-icon-container').on('click', function(){
-                show().done(function(articles, gesamtPreis){
+					show().done(function(articles, gesamtPreis){
                         $.each(articles.artikel, function(i,article){
                             if(article.preis != undefined){
                                 article.html_preis = "<span class='artikel_preis'>"+parseFloat(article.preis).formatMoney(2,',','.')+"</span>€";
@@ -77,7 +93,8 @@ var WARENKORB = function(){
                     var artikel = Mustache.render(tpl_warenkorb, articles);
                     artikel += "<script>$('#triggerling').trigger('warenkorb_open');</script>";
                     artikel += Mustache.render(tpl_preis, {gesamtPreis: gesamtPreis, preis: function(){return "<span id='gesamtPreis_warenkorb' class='preis'>"+parseFloat(this.gesamtPreis).formatMoney(2,',','.')+"</span>€"}})
-                    artikel += korb.length > 0 ? kaufen : "";  
+                    artikel += korb.length > 0 ? kaufen : ""; 
+					
                     BootstrapDialog.show({
                         message: artikel,
                         closable: false,
@@ -93,7 +110,7 @@ var WARENKORB = function(){
                         }, 
                         {
                             label: "Warenkorb leeren",
-                            cssClass: "btn-error",
+                            cssClass: "btn-inverse",
                             action: function(dialogItself){
                                 sessionStorage.setItem('warenkorb', null);
                                 korb = [];
@@ -106,6 +123,14 @@ var WARENKORB = function(){
                                 });
                             }
                         },
+						{
+							label:"Das von letztes Mal",
+							cssClass: "btn-warn",
+							action: function(dialogItself){
+								dialogItself.close();
+								$('#triggerling').trigger('von_gestern');
+							}
+						},
                         {
                             label: "Kaufen",
                             cssClass: "btn-primary",
@@ -126,8 +151,21 @@ var WARENKORB = function(){
                     });
                     
                 });
-            });
+			});
         },
+		vonGestern: function(){
+			var self = this;
+			getLast().done(function(lastOrder){
+				if(lastOrder.noBest === true){
+					BootstrapDialog.alert({message: "Deine Erste Bestellung hier. <br> Noch keine Daten vorhanden."});
+				} else {
+					$.each(lastOrder, function(i,last){
+						self.add(last);
+					});
+					self.refresh_artikel();
+				}
+			});
+		},
         inhalt : function(){
             return korb.length;
         },

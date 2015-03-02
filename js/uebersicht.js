@@ -7,19 +7,17 @@ var uebersicht = {
       $('.artikel_entfernen').on('click', self.artikel_entfernen);
       $('#uebersicht_liste_leeren').on('click', self.leeren);
       $('#uebersicht_bestellung_bemerkung').on('keyup', function(){ self.nachricht_aendern(this,self)});
-      $('#uebersicht_bestaetigen').on('click',function(e){
-          e.preventDefault();
-          self.bestaetigen();
-      });
+      $('#uebersicht_bestaetigen').on('click', function(e){ e.preventDefault(); self.bestaetigen(this,self)});
     });
     },
     artikel_tpl : " {{#artikel}}\
                     <div class='row-fluid uebersicht_artikel_einzel'>\
                     <div class='span2'>{{name}}</div>\
-                    <div class='span3'>{{beschreibung}}</div>\
+                    <div class='span2'>{{beschreibung}}</div>\
                     <div class='span2'>{{kategorie}}</div>\
-                    <div class='span2'><input class='span12' id='menge_{{art_id}}' type='number' min='0' max='8' step='1' value='1' name='menge_{{art_id}}' /></div>\
-                    <div class='span2'>{{&html_preis}}</div>\
+                    <div class='span1'><input class='span12' id='menge_{{art_id}}' type='number' min='0' max='8' step='1' value='1' name='menge_{{art_id}}' /></div>\
+                    <div class='span1'>{{&html_preis}}</div>\
+					<div class='span3'><input type='text' id='bemerkung_{{art_id}}' name='bemerkung_{{art_id}}' placeholder='Sonderwünsche?' /></div>\
                     <div class='span1'><button class='artikel_entfernen btn-warning pull-right' data-artikel='{{art_id}}'>-</button></div>\
                     </div>\
                     {{/artikel}}\
@@ -46,8 +44,8 @@ var uebersicht = {
         });
         return q;
     },
-    bestaetigen: function(e){
-		e.preventDefault();
+    bestaetigen: function(button, self){
+		console.log(self);
 	},
     leeren: function(e){
 		e.preventDefault();

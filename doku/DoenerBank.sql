@@ -7,9 +7,9 @@ CREATE TABLE doener_artikel (
 );
 CREATE TABLE doener_nutzer (
 	user_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-        `loggedIn` VARCHAR( 255 ) NULL,
+    `loggedIn` VARCHAR( 255 ) NULL,
 	`name` VARCHAR(255),
-        `email` VARCHAR( 255 ) NULL,
+    `email` VARCHAR( 255 ) NULL,
 	passwort VARCHAR(255),
 	`admin` ENUM("0","1") DEFAULT"0"
 );
@@ -17,7 +17,7 @@ CREATE TABLE doener_tagesestellung(
 	best_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	datum VARCHAR(255) NOT NULL,
 	gesamtpreis DOUBLE NOT NULL,
-        closed ENUM("0","1") DEFAULT"0"
+    closed ENUM("0","1") DEFAULT"0"
 );
 
 CREATE TABLE doener_artikelliste (
@@ -31,7 +31,7 @@ CREATE TABLE doener_einzelbestellung (
 	ebest_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	user_id INT NOT NULL,
 	best_id INT NOT NULL,
-        ebest_preis DOUBLE NOT NULL DEFAULT '0.0'
+    bestaetigt ENUM("0","1") DEFAULT"0"
 );
 
 /**

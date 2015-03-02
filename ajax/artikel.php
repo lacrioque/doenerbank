@@ -21,6 +21,7 @@ if($values['artikel']=='alle'){
 	$out = json_encode($artikel);
 }
 else if($values['artikel']=='einige'){
+    $objBestellung->clean_articles();
     $einige_artikel = explode('|',$values['art_ids']);
         if($values['art_ids'] == "|null" || $values['art_ids'] == 'null|'){
             $out = json_encode(array('success' => true, "gesamtPreis"=>0.0, "artikelarray" => array()));
@@ -45,6 +46,7 @@ else if($values['artikel']=='einige'){
 
         
 } else if($values['artikel']=='confirm'){
+    $objBestellung->clean_articles();
     $artikel = explode('|',$values['korb']);
         foreach($einige_artikel as $i=>$artikel){
             if($artikel === "" || $artikel == 'null' || $artikel == false){ 

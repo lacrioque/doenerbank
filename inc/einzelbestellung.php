@@ -20,7 +20,7 @@ class einzelbestellung {
             $this->ebest_id = $return[0]['ebest_id'];
             $this->ebest_preis = $return[0]['ebest_preis'];
         }
-        $this->clean_articles();
+        
     }
     
     public function getArtikellisten(){
@@ -35,7 +35,7 @@ class einzelbestellung {
     
     public function getArtikel(){
         foreach ($this->artlist_ids as $i => $artikelliste){
-            $artikel = $this->getArtikelausArtListID($artikelliste);
+            $artikel = new artikel($this->getArtikelausArtListID($artikelliste));
             $artikel_arr[] = $artikel->getArtikelData();
         }
         return $artikel_arr;
@@ -55,7 +55,7 @@ class einzelbestellung {
     
     public function unregisterArticle($artlist_id){
         $DB = new DB();
-        $artikel = $this->getArtikelausArtListID($artlist_id);
+        $artikel = new artikel($this->getArtikelausArtListID($artlist_id));
         $this->preis_vermindern($artikel->preis());
         $query_artlist = "DELETE FROM doener_artikelliste WHERE artlist_id = ?";
         $result = $DB->update_values($query_artlist, array($artlist_id));
@@ -66,7 +66,7 @@ class einzelbestellung {
         $this->getArtikellisten();
         $preis = 0.0;
         foreach ($this->artlist_ids as $i => $artikelliste){
-            $artikel = $this->getArtikelausArtListID($artikelliste);
+            $artikel = new artikel($this->getArtikelausArtListID($artikelliste));
             $preis +=$artikel->preis();
         }
         $this->ebest_preis = $preis;
@@ -111,7 +111,7 @@ class einzelbestellung {
         $DB = new DB();
         $query = "SELECT art_id FROM doener_artikelliste WHERE artlist_id = ?";
         $artikel = $DB->query_values($query, array($artlist_id));
-        return new Artikel($artikel[0]['art_id']);
+        return $artikel[0]['art_id'];
     }
 
 	public function saveAenderung(){

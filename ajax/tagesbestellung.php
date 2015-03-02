@@ -11,6 +11,7 @@ $values = $_GET;
 $out = "";
 if($values['bestellung']=='uebersicht'){
 	$einzelbestellung = new einzelbestellung( $_SESSION['best_id'], $_SESSION['user_id']);
+        $einzelbestellung->getArtikellisten();
         varDump($einzelbestellung);
 	$artikel = $einzelbestellung->getArtikel();
 	$out = json_encode(array('success' => true, "artikelarray" => array('artikel'=>$artikel)));

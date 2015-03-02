@@ -14,7 +14,7 @@ var uebersicht = {
     });
     },
     artikel_tpl : " {{#artikel}}\
-                    <div class='row-fluid'>\
+                    <div class='row-fluid uebersicht_artikel_einzel'>\
                     <div class='span2'>{{name}}</div>\
                     <div class='span3'>{{beschreibung}}</div>\
                     <div class='span2'>{{kategorie}}</div>\
@@ -32,7 +32,6 @@ var uebersicht = {
         var self = this, q = $.Deferred(), html, render;
         Mustache.parse(this.artikel_tpl);
         $.getJSON("../ajax/tagesbestellung.php?bestellung=uebersicht", function(data){
-            console.log(data);
             if(!data.success){alert("Fehler! Bitte versuchen sie es später nocheinmal"); return true;}
             $.each(data.artikelarray.artikel, function(i,article){
                             if(article.preis != undefined){
@@ -42,15 +41,17 @@ var uebersicht = {
             html = "<div class='container'><form>"
             html+= Mustache.render(self.artikel_tpl, data.artikelarray);
             html+= "</form></div>";
+			$('#gesamtpreis_uebersicht').html(data.gesamtPreis.formatMoney(2,',','.'))
             q.resolve(html);
         });
         return q;
     },
-    bestaetigen: function(){
-		
+    bestaetigen: function(e){
+		e.preventDefault();
 	},
-    leeren: function(){
-			BootstrapDialog.confirm({
+    leeren: function(e){
+		e.preventDefault();
+			BootstrapDialog.show({
 				message: "Wirklich alle Artikel zurücksetzen?",
 				closable: false,
 				buttons: [
@@ -76,8 +77,16 @@ var uebersicht = {
     nachricht_aendern: function(object, self){
 		self.bemerkungen = $(object).val();
 	},
-    artikel_entfernen: function(){
-        
+    artikel_entfernen: function(e){
+        e.preventDefault();
+			$('#triggerling').trigger('remove_from_warenkorb', [$(this).data('artikel')]);
+            var preis_item = $(this).closest('.uebersicht_artikel_einzel').find('.artikel_preis'),
+            preis = (preis_item.html()).replace(',','.'),
+            gesamtPreis = ($('#gesamtpreis_uebersicht').html()).replace(',','.'),
+            newGesamtPreis = gesamtPreis-preis;
+            $('#gesamtpreis_uebersicht').html(newGesamtPreis.formatMoney(2,',','.'));
+            $(this).closest('.uebersicht_artikel_einzel').fadeOut(400);
+			$('#warenkorb').trigger('change');
     }
 };
 

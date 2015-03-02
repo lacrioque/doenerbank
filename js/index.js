@@ -41,6 +41,9 @@ $('#triggerling').on('artikel_reload', function(){
     console.log('Triggerling: artikel_reload');
     Artikel.refresh();
 });
+$('#triggerling').on('remove_from_warenkorb', function(artikelnummer){
+	warenkorb.remove(artikelnummer);
+});
 
 $('#triggerling').on('warenkorb_open', function(){
         $('.remove-article').on('click', function(e){

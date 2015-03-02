@@ -12,10 +12,11 @@ $values = $_GET;
 $out = "";
 if($values['bestellung']=='uebersicht'){
 	$einzelbestellung = new einzelbestellung( $_SESSION['best_id'], $_SESSION['user_id']);
-        $einzelbestellung->getArtikellisten();
+        $einzelbestellung->clean_articles();
         varDump($_SESSION);
 	$artikel = $einzelbestellung->getArtikel();
-	$out = json_encode(array('success' => true, "artikelarray" => array('artikel'=>$artikel)));
+	$gesamtPreis = $einzelbestellung->getGesamtPreis();
+	$out = json_encode(array('success' => true, "gesamtPreis"=>$gesamtPreis, "artikelarray" => array('artikel'=>$artikel)));
 }
 
 die($out);

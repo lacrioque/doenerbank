@@ -112,7 +112,11 @@ class einzelbestellung {
         $artikel = $DB->query_values($query, array($artlist_id));
         return $artikel[0]['art_id'];
     }
-
+	
+	public function getGesamtPreis(){
+		return $this->ebest_preis;
+	}
+	
 	public function saveAenderung(){
         $DB = new DB();
         $query = "UPDATE doener_einzelbestellung SET ebest_preis=? WHERE ebest_id = ".$this->ebest_id;

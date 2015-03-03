@@ -12,6 +12,7 @@ include 'user.php';
 
 $header = '	<link href="css/bootstrap.min.css" rel="stylesheet">
 			<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+			<link href="css/bootstrap-switch.min.css" rel="stylesheet">
 			<link href="css/bootstrap-dialog.css" rel="stylesheet">
 			<link href="css/main.css" rel="stylesheet" type="text/css"/>
 			<link href="css/login.css" rel="stylesheet" type="text/css"/>

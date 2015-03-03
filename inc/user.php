@@ -72,6 +72,20 @@ public function isAdmin(){
 	return  $this->user_data['admin'] == 1 ? true : false;
 }
 
+public function setAdmin(){
+    $DB = new DB();
+    $adminQuery = "UPDATE doener_nutzer SET admin = '1' WHERE user_id = ?";
+    $test = $DB->update_values($adminQuery, array($this->user_id));
+    return $test!==false ? true : false;
+}
+
+public function unsetAdmin(){
+    $DB = new DB();
+    $adminQuery = "UPDATE doener_nutzer SET admin = '0' WHERE user_id = ?";
+    $test = $DB->update_values($adminQuery, array($this->user_id));
+    return $test!==false ? true : false;
+}
+
 public function saveToSession($keyValueArr){
     foreach($keyValueArr as $key=>$value){
         if(!(empty($key) && empty($value))){

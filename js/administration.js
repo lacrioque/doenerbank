@@ -1,16 +1,17 @@
 var administration = {
 	user_tpl: "{{#user}}\
-<div class='row-fluid admin_user_einzel'>\
+<div class='row-fluid admin_user_einzel border-simple'>\
 	<div class='span2 user_name'>{{name}}</div>\
 	<div class='span4 user_email'>{{email}}</div>\
 	<div class='span1'>{{{online}}}</div>\
-	<div class='span3'><input type='checkbox' class='admin_user_admin' {{idAdminChecked}} id='{{user_id}}' data-user='{{user_id}}' /></div>\
+	<div class='span3'><input type='checkbox' class='admin_user_admin' {{isAdminChecked}} id='{{user_id}}' data-user='{{user_id}}' /></div>\
 	<div class='span2'><button class='btn btn-danger admin_user_delete' data-user='{{user_id}}'>Löschen</button></div>\
 </div>\
 {{/user}}",
 	order_tpl: "\
 {{#user}}\
-	<div class='row-fluid'><div class='span12 text-center'>{{name}} -- {{{gesamtPreis}}}</div></div>\
+<div class='container-fluid border-simple'>\
+	<div class='row-fluid'><div class='span12 text-center'><h3>{{name}} -- {{{gesamtPreis}}}</h3></div>\
 	<div class='row-fluid'>\
 		{{#artikel}}\
 			<div class='span5 artikel-einzel'>\
@@ -20,10 +21,11 @@ var administration = {
 		{{/artikel}}\
 	</div>\
 	<div class='row-fluid'>\
-		<div class='span3 pull-right text-right>'\
-			<button class='btn btn-inverse admin_bestellung_delete' data-order='{{ebest_id}}>Bestellung löschen</button>'\
+		<div class='span3 pull-right text-right'>\
+			<button class='btn btn-inverse admin_bestellung_delete' data-order='{{ebest_id}}'>Bestellung löschen</button>\
 		</div>\
 	</div>\
+    </div>\
 {{/user}}\
 ",
 	init: function(){
@@ -36,19 +38,24 @@ var administration = {
 			order_html = Mustache.render(self.order_tpl, {user : orders});
 			$('#administration_nutzer').html(user_html);
 			$('#administration_bestellungen').html(order_html);
-			$(".admin_user_admin").bootstrapSwitch();
-			$('.formatEuro').each(function(i,item){
-				var number = $(item).text()
-				$(item).html(number.formatMoney(2,',','.') + "€");
-			});
-			$('.admin_bestellung_delete').on('click', function(e){self.rm_einzel(e, this);});
-			$('.admin_user_admin').on('change', function(e){
-				if($(this).prop('checked')){
+                        
+			$(".admin_user_admin").each(function(){
+                            $(this).bootstrapSwitch();
+                            $(this).on('switchChange.bootstrapSwitch', function(event, state) {
+				if(state){
 					self.user_admin($(this).data('user'));
 				} else {
 					self.user_no_admin($(this).data('user'));
 				}
+                            });
+                        });
+                        
+			$('.formatEuro').each(function(i,item){
+				var number = $(item).text()
+				$(item).html(parseFloat(number).formatMoney(2,',','.') + "€");
 			});
+			$('.admin_bestellung_delete').on('click', function(e){self.rm_einzel(e, this);});
+			
 			$('.admin_user_delete').on('click', function(e){
 				self.rm_user(e, this);
 			});
@@ -72,8 +79,8 @@ var administration = {
 				users = datablock.users;
 				orders = datablock.orders;
 				$.each(users, function(i,user){
-					user.online = user.loggedIn === 'false' ? "<span class='offline'>&nbsp;</span>" :  "<span class='online'>&nbsp;</span>";
-					user.idAdminChecked = user.admin === 1 ? "checked" : ""; 
+                                    user.online = user.loggedIn === 'false' ? "<span class='offline'>&nbsp;</span>" :  "<span class='online'>&nbsp;</span>";
+                                    user.isAdminChecked = user.admin == 1 ? "checked" : ""; 
 				});
 				q.resolve(users, orders);
 			}
@@ -125,7 +132,7 @@ var administration = {
 	user_admin: function(id){
 		var url = "ajax/administration.php?admin=deristtoll&uid="+id;
 			$.getJSON(url, function(data){
-				if(data.success != true){
+				if(data.success != "true"){
 					$('#'+id).prop('checked',false);
 				}
 			});

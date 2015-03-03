@@ -10,6 +10,7 @@ class einzelbestellung {
         $DB = new DB();
         $query_ebest = "SELECT ebest_id,ebest_preis,bestaetigt FROM doener_einzelbestellung WHERE best_id = ? AND user_id = ?";
         $return = $DB->query_values($query_ebest, array($best_id, $user_id));
+        varDump("Einzelbestellung");
         varDump($return);
         if($return == false){
             $this->ebest_preis = 0.0;

@@ -26,7 +26,7 @@ public function __construct($user_id = false){
 		$pass = $_POST["password"];
 		$array = array($user,DB::crypt($pass));
 	} else {
-		$query = "SELECT user_id,passwort,name,loggedIn FROM doener_nutzer WHERE user_id = ?";
+		$query = "SELECT user_id,passwort,name,loggedIn,admin FROM doener_nutzer WHERE user_id = ?";
 		$array = array( $user_id);
 	}
     $DB = new DB();
@@ -87,6 +87,7 @@ public function getUserData(){
     if($result !== false){
         $this->user_data = $result[0];
     }
+	$_SESSION['user'] = $this->user_data;
 }
 
 public function getUserBestellungen(){

@@ -1,5 +1,6 @@
 var uebersicht = {
     url: "../ajax/uebersicht.php?",
+	wareninhalt : [],
     init : function(){
         var self=this;
         self.render().done(function(html){
@@ -12,7 +13,7 @@ var uebersicht = {
     },
     artikel_tpl : " {{#artikel}}\
                     <div class='row-fluid uebersicht_artikel_einzel'>\
-                    <div class='span2'>{{name}}</div>\
+                    <div class='span2'>{{name}}<input type='hidden' name='{{art_id}}' id='artikel_{{art_id}}' value='' /></div>\
                     <div class='span2'>{{beschreibung}}</div>\
                     <div class='span2'>{{kategorie}}</div>\
                     <div class='span1'><input class='span12' id='menge_{{art_id}}' type='number' min='0' max='8' step='1' value='1' name='menge_{{art_id}}' /></div>\
@@ -35,8 +36,9 @@ var uebersicht = {
                             if(article.preis != undefined){
                                 article.html_preis = "<span class='artikel_preis'>"+parseFloat(article.preis).formatMoney(2,',','.')+"</span>€";
                             }
+							self.wareninhalt.push(article);
                             });
-            html = "<div class='container'><form>"
+            html = "<div class='container'><form id='bestellung_ubersicht_form'>"
             html+= Mustache.render(self.artikel_tpl, data.artikelarray);
             html+= "</form></div>";
 			$('#gesamtpreis_uebersicht').html(data.gesamtPreis.formatMoney(2,',','.'))
@@ -45,7 +47,26 @@ var uebersicht = {
         return q;
     },
     bestaetigen: function(button, self){
-		console.log(self);
+		var url= "/ajax/tagesbestellung.php?bestellung=bestaetigen", urldata, message, message_tpl, artikel = [];
+		message_tpl = "{{#artikel}}\
+							<li>{{menge}}x {{name}} </li>\
+						{{/artikel}}"
+		$.each(self.wareninhalt, function(i,item){
+			var id = item.art_id;
+			artikel.push({art_id: id, name: item.name, menge: $('#menge_'+id).val(), bemerkung: $('#bemerkung_'+id).val()});
+		});
+		message	 = "<div>Die Bestellung wurde gespeichert.</div><ul>";
+		message += Mustache.render(message_tpl, {artikel: artikel});
+		message += "</ul>";
+		urldata = {artikel: JSON.stringify(artikel)};
+		$.getJSON(url, urldata, function(data){
+			if(data.success == true){
+				BootstrapDialog.alert({
+					message: message
+				});
+				location.href = "index.php";
+			}
+		});
 	},
     leeren: function(e){
 		e.preventDefault();
@@ -70,10 +91,6 @@ var uebersicht = {
 					}
 				]
 			});
-	},
-	bemerkungen : "",
-    nachricht_aendern: function(object, self){
-		self.bemerkungen = $(object).val();
 	},
     artikel_entfernen: function(e){
         e.preventDefault();

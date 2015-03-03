@@ -11,17 +11,21 @@ include("../inc/einzelbestellung.php");
 if(!isset($_SESSION['loggedin'])){die(json_encode(array("success"=>"false")));}
 $values = $_GET;
 $einzelbestellung = new einzelbestellung( $_SESSION['best_id'], $_SESSION['user_id']);
-$einzelbestellung->clean_articles();
 $out = "";
 
 if($values['bestellung']=='uebersicht'){
+	$einzelbestellung->clean_articles();
 	$artikel = $einzelbestellung->getArtikel();
 	$gesamtPreis = $einzelbestellung->getGesamtPreis();
 	$out = json_encode(array('success' => true, "gesamtPreis"=>$gesamtPreis, "artikelarray" => array('artikel'=>$artikel)));
 	
 } else if($values['bestellung']=='bestaetigen'){
+	$artikelDaten = json_decode($_POST['artikel'],true);
+	foreach($artikelDaten as $artikel){
+		$einzelbestellung->finalizeArticle($artikel['art_id'], $artikel['bemerkung'], $artikel['menge']);
+	}
 	$einzelbestellung->closeUp();
-	
+	$out = json_encode(array("success"=> true));
 	
 } else if($values['bestellung']=='letzte'){
 	$retarray = $einzelbestellung->getLetzteBestellung();

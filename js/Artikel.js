@@ -11,7 +11,7 @@ var Artikel = {
         this.load().done(function(artikel){
             if(artikel == false || artikel == ""){
                 jObject.html(self.tpl_noartikel);
-            } else {
+			} else {
             kategorien = artikel.kategorien;
             delete(artikel.kategorien);
             $.each(kategorien, function(i,kategorie){
@@ -26,8 +26,10 @@ var Artikel = {
                 html += '</div>';
             });
             jObject.html(html);
-            
             $('#triggerling').trigger('artikel_geladen');
+			if(artikel.geschlossen === "true"){
+				$('#triggerling').trigger('geschlossen');
+			}
         }
         });
     },
@@ -37,12 +39,14 @@ var Artikel = {
             url: self.url,
             dataType: 'json',
             success: function(data, status, jqXHR){
-                $.each(data, function(row,article){
+				var article = data.artikel;
+                $.each(article, function(row,article){
                     article.preis = "<span class='art_preis'>" + parseFloat(article.preis).formatMoney(2,',','.') + "€</span>";
                     art[article.kategorie] = art[article.kategorie] || [];
                     art[article.kategorie].push(article);
                     art.kategorien.indexOf(article.kategorie) === -1 ?  art.kategorien.push(article.kategorie) : null;
                 });
+				art.geschlossen = data.geschlossen;
             },
             error: function(jqXHR, status, error){
                 console.log(status +": " + error);

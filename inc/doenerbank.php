@@ -24,10 +24,12 @@ if(strpos($_SERVER['HTTP_USER_AGENT'],"MSIE 7.0;")){
 }
 $header .="<script src='js/checkLoginForm.js'></script>\n"
 		. "<script src='js/bootstrap.min.js'></script>\n"
+		. "<script src='js/bootstrap-switch.min.js'></script>\n"
 		. "<script src='js/register.js'></script>\n"
 		. "<script src='js/mustache.js'></script>\n"
 		. "<script src='js/bootstrap-dialog.js'></script>\n"
 		. "<script src='js/Artikel.js'></script>\n"
 		. "<script src='js/warenkorb.js'></script>\n"
+		. "<script src='js/administration.js'></script>\n"
 		. "<script src='js/uebersicht.js'></script>\n"
 		. "<script src='js/index.js'></script>";

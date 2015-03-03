@@ -63,6 +63,12 @@ $('#triggerling').on('warenkorb_open', function(){
            });
     });
 
+$('#triggerling').on('geschlossen', function(){
+	$('.artikel-bestellen').css({'display':'none'});
+	$('.artikel-abbestellen').css({'display':'none'});
+	$('#bestellung_geschlossen').fadeIn(1000);
+});
+
 $('#triggerling').on('artikel_geladen', function(){
     warenkorb.refresh_artikel();
     $('.artikel-bestellen').on('click',function(e){

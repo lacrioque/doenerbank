@@ -31,8 +31,8 @@ CREATE TABLE doener_einzelbestellung (
 	ebest_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	user_id INT NOT NULL,
 	best_id INT NOT NULL,
-        ebest_preis DOUBLE NOT NULL,
-       bestaetigt ENUM("0","1") DEFAULT"0"
+    ebest_preis DOUBLE NOT NULL,
+    bestaetigt ENUM("0","1") DEFAULT"0"
 );
 
 CREATE VIEW bestellung_gesamt AS SELECT a.name as Artikelname,a.preis as Artikelpreis,

@@ -47,7 +47,7 @@ var WARENKORB = function(){
             $.getJSON(url+urldata, function(data){
                 if(data !== undefined){
                     if(data.success == true){
-                        def.resolve(data.artikelarray);
+                        def.resolve(data);
                     } else {
                         def.resolve(false);
                     }
@@ -84,7 +84,11 @@ var WARENKORB = function(){
                $(this).html("Artikel im Korb: " + korb.length);
            });
            $('#warenkorb-icon-container').on('click', function(){
-					show().done(function(articles, gesamtPreis){
+					show().done(function(data, gesamtPreis){
+						if(data.geschlossen === true){
+							BootstrapDialog.alert({message: 'Diese Bestellung ist bereits geschlossen.<br>Morgen gibt es eine neue Möglichkeit.'});
+						} else {
+						var articles = data.artikelarray;
                         $.each(articles.artikel, function(i,article){
                             if(article.preis != undefined){
                                 article.html_preis = "<span class='artikel_preis'>"+parseFloat(article.preis).formatMoney(2,',','.')+"</span>€";
@@ -92,7 +96,7 @@ var WARENKORB = function(){
                         });
                     var artikel = Mustache.render(tpl_warenkorb, articles);
                     artikel += "<script>$('#triggerling').trigger('warenkorb_open');</script>";
-                    artikel += Mustache.render(tpl_preis, {gesamtPreis: gesamtPreis, preis: function(){return "<span id='gesamtPreis_warenkorb' class='preis'>"+parseFloat(this.gesamtPreis).formatMoney(2,',','.')+"</span>€"}})
+                    artikel += Mustache.render(tpl_preis, {gesamtPreis: data.gesamtPreis, preis: function(){return "<span id='gesamtPreis_warenkorb' class='preis'>"+parseFloat(this.gesamtPreis).formatMoney(2,',','.')+"</span>€"}})
                     artikel += korb.length > 0 ? kaufen : ""; 
 					
                     BootstrapDialog.show({
@@ -151,7 +155,7 @@ var WARENKORB = function(){
                         }
                         ]
                     });
-                    
+						}
                 });
 			});
         },

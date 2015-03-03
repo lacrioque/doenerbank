@@ -88,22 +88,26 @@
             <li><a href="index.php?view=admin">Administration</a></li>
             <li> <button class="btn btn-danger" id="logout">Logout</button></li>
           </ul> 
-            <div class="span2 pull-right clearfix">
-		<div class="text-success">
-                    <?php if($loggedIn){echo "Willkommen ".$user->getName();} ?>
-                    <span class="" id="warenkorb"></span> 
-                </div>
-                 
-                <div class="warenkorb-container pull-right clearfix">
-                      <span id="warenkorb-icon-container" class="warenkorb-icon-container"></span>
-                      <div id="warenkorb-vorschau" class="warenkorb-vorschau"></div>
-                </div>
+            <div class="span3 pull-right clearfix">
+				<div class="row-fluid">
+					<div class="text-success span10">
+						<p> <?php if($loggedIn){echo "Willkommen ".$user->getName();} ?></p>
+						<p><span class="" id="warenkorb"></span> </p>
+					</div>
+
+					<div class="warenkorb-container span2">
+						  <span id="warenkorb-icon-container" class="warenkorb-icon-container"></span>
+						  <div id="warenkorb-vorschau" class="warenkorb-vorschau"></div>
+					</div>
+				</div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
+	<div class="alert alert-error" id="bestellung_geschlossen" style="display: none;">
+		<p class="text-center"><strong>Achtung!</strong> Die Bestellung ist schon geschlossen. Entweder ist schon bestellt, oder deine Bestellung wurde schon gespeichert.</p>
+        </div>
     <div class="container">
     <?php if($loggedIn == false):?>
             <div id="login_window">
@@ -132,11 +136,14 @@
             <?php if($view == "admin"):?>
                 <h1>Administration</h1>
                 <div class="container-fluid" id="administration">
+					<div id="administration_nutzer" class="container-fluid"></div>
+					
+					<div id="administration_bestellungen" class="container-fluid"></div>
                     <div class="row control">
                         <div class="btn-group" role="group">
-                            <button id="submit" class="btn-info">Speichern</button>
-                            <button id="clear" class="btn-info"> Löschen </button>
-                            <button id="print" class="btn-info">Speichern und Drucken</button>
+                            <button id="admin_bestellung_submit" class="btn-info">Speichern</button>
+                            <button id="admin_bestellung_clear" class="btn-info"> Löschen </button>
+                            <button id="admin_bestellung_print" class="btn-info">Speichern und Drucken</button>
                         </div>
                     </div>
                     <div class="row" id="user"></div>

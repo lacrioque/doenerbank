@@ -1,13 +1,16 @@
 <?php
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
 require_once("../inc/defines.php");
 include("../inc/database.php");
 $values = $_GET;
 $out = "";
-if($values['register'] == true && $values['timelock'] == "false"){
+
+if($values['register'] == 'true' && $values['timelock'] == "false"){
+	
 	$DB = new DB();
 	$query = "INSERT INTO doener_nutzer ( name , passwort, email ) VALUES ( ?, ?, ?)";
 	$newID = $DB->insert_values($query, array($values['user'],DB::crypt($values['pass']), $values['email']));
-	
 	$test = $newID !== false ? true : false;
 	if ($test === true){
 		$out = json_encode(

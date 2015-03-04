@@ -79,7 +79,7 @@ var WARENKORB = function(){
             var self = this;
            $('#warenkorb-icon-container').html(icon);
            $('#warenkorb').on('change', function(){
-               $(this).html("Artikel im Korb: " + korb.length);
+               $(this).html(korb.length);
            });
            $('#warenkorb-icon-container').on('click', function(){
 					show().done(function(data, gesamtPreis){

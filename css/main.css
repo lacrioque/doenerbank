@@ -1,3 +1,12 @@
+body{
+    
+    padding: 0!important;
+    margin: 0!important;
+}
+.maincontent{
+    padding-left: 20px!important;
+    padding-right: 20px!important;
+}
 .html-mobile-background {
     background: url("../img/bg.jpg");
     position: fixed;
@@ -11,14 +20,12 @@
 }
 
 .border-simple{
-    border: 1px solid black;
-    box-shadow: 0px 1px 2px #333;
+    border-bottom: 1px solid grey;
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
-
-.border-outer{
-    border: 1px solid black;
-    box-shadow: 0px 1px 2px #333;
-    margin: 2px 6px;
+.border-simple:last-child{
+    border: none;
 }
 
 .artikel-einzel{
@@ -46,7 +53,6 @@
 }
 .artikel-einzel>.artikel-interaktion{
     padding: 2px 14px;
-    border-radius: 10%;
     width: 70%;
 }
 .warenkorb-icon-container{
@@ -70,5 +76,53 @@
 .gesamtpreis_uebersicht{
     padding: 2px;
     font-size: 120%;
-    font-weigth: bold;
+    font-weight: bold;
+}
+.wk_label{
+    display: block;
+    width: 15px;
+    height: 7px;
+    margin-left:15px;
+    margin-top: -4px;
+    border-radius: 100%;
+    border: 2px solid orange;
+    text-align: center;
+    padding-bottom: 8px;
+    position:absolute;
+    background: black;
+    color: orange;
+    font-size: 8px;
+    cursor: pointer;
+}
+.wk_label span{
+    margin-top: -1px;
+    margin-left: -2px;
+    position: absolute;
+}
+.greeting p{
+    
+    color: orange;
+    text-align: right;
+    padding-right: 5px;
+    
+}
+h3{
+    border-bottom: 1px solid grey;
+    text-transform: capitalize;
+}
+.greeting{
+    
+    text-transform: capitalize;
+    padding-top: 9px;
+}
+.navbar-inverse .brand{
+    color: orange;
+}
+.user_name{
+    text-transform: capitalize;
+    font-size: 16px;
+    font-weight: bold;
+}
+.adminbuttons{
+    margin-top: 10px;
 }

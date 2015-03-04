@@ -57,8 +57,9 @@
 <head>
 	<meta charset="utf-8"/>
 	<meta name="author" content="Steffen Pfeil - ITFU1" />
-	<title>ITFU1 - Doener</title>
+	<title>Dönerbank - Fast Food Bestellsystem</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.png" type="image/png" />
     <?php echo $header ?>
 </head>
 
@@ -90,10 +91,10 @@
           </ul> 
             <div class="span3 pull-right clearfix">
 				<div class="row-fluid">
-					<div class="text-success span10">
+					<div class="greeting span10">
 						<p> <?php if($loggedIn){echo "Willkommen ".$user->getName();} ?></p>
 					</div>
-                    <span class="wk_label" id="warenkorb"></span> 
+                     
 
 					<div class="warenkorb-container span2">
 						  <span id="warenkorb-icon-container" class="warenkorb-icon-container"></span>
@@ -108,7 +109,7 @@
 	<div class="alert alert-error" id="bestellung_geschlossen" style="display: none;">
 		<p class="text-center"><strong>Achtung!</strong> Die Bestellung ist schon geschlossen. Entweder ist schon bestellt, oder deine Bestellung wurde schon gespeichert.</p>
         </div>
-    <div class="container">
+    <div class="container maincontent">
     <?php if($loggedIn == false):?>
             <div id="login_window">
                 <form method="post">
@@ -135,18 +136,20 @@
             <?php endif ?>
             <?php if($view == "admin"):?>
                 <h1>Administration</h1>
+                
                 <div class="container-fluid" id="administration">
-					<div id="administration_nutzer" class="container-fluid border-outer"></div>
-					
-					<div id="administration_bestellungen" class="container-fluid border-outer"></div>
-                    <div class="row control">
-                        <div class="btn-group" role="group">
-                            <button id="admin_bestellung_submit" class="btn-info">Speichern</button>
-                            <button id="admin_bestellung_clear" class="btn-info"> Löschen </button>
-                            <button id="admin_bestellung_print" class="btn-info">Speichern und Drucken</button>
+                <h3>Benutzer</h3>
+					<div id="administration_nutzer" class="container-fluid"></div>
+                    <h3>Bestellungen</h3>
+					<div id="administration_bestellungen" class="container-fluid"></div>
+                        <div class="btn-group adminbuttons" role="group">
+                            <button id="admin_bestellung_submit" class="btn-info btn">Speichern</button>
+                            <button id="admin_bestellung_clear" class="btn-info btn"> Löschen </button>
+                            <button id="admin_bestellung_print" class="btn-info btn">Speichern und Drucken</button>
                         </div>
-                    </div>
                     <div class="row" id="user"></div>
+                    
+                    
                     <div class="row" id="bestellungen" class="hidden"></div>
                     <script>administration.init();</script>
                 </div>

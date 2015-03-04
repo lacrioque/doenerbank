@@ -17,7 +17,8 @@ CREATE TABLE doener_tagesbestellung(
 	best_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	datum VARCHAR(255) NOT NULL,
 	gesamtpreis DOUBLE NOT NULL,
-    closed ENUM("0","1") DEFAULT"0"
+        closed ENUM("0","1") DEFAULT"0",
+        bemerkungen TEXT DEFAULT NULL
 );
 
 CREATE TABLE doener_artikelliste (

@@ -18,9 +18,7 @@ var WARENKORB = function(){
 </div>{{/artikel}} \
 {{^artikel}}<div class='warenkorb-artikel leer'>Keinen Hunger?</div>{{/artikel}}";
     tpl_preis = "<p class='row-fluid'><span class='span4 offest6 pull-right clearfix'>Gesamtpreis: {{&preis}} </span></p>";
-    kaufen = "<p class='row-fluid'>\
-                <label for'bestellung_bemerkung' class='span3'>Anmerkungen zur Bestellung?</label>\
-                <textarea class='span6' id='bestellung_bemerkungen'></textarea></p>";
+    kaufen = "";
     icon = $('<span class="warenkorb-img"><img src="/img/warenkorb.png" alt="Warenkorb - Icon" /></span>');
 	
 	getLast = function(){

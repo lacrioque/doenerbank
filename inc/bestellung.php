@@ -48,12 +48,7 @@ class bestellung{
     public function getArtikelForUser($user_id,$ebest_id){
         $DB = new DB();
         $query_artikel = "SELECT * FROM bestellung_gesamt WHERE Nutzer = ? AND datum = ".$this->datum;
-        $mengenQuery = "SELECT art_id,ebest_id,COUNT(art_id) as menge FROM doener_artikelliste WHERE ebest_id = ? AND art_id = ? GROUP BY ebest_id";
         $artikel_array = $DB->query_values($query_artikel, array($user_id));
-        foreach ($artikel_array as $i => $artikel){
-            $menge = $DB->query_values($mengenQuery, array($ebest_id, $artikel['art_id']));
-            $artikel_array[$i]['menge'] = $menge[0]['menge'];
-        }
         return $artikel_array;
     }
     
@@ -73,12 +68,40 @@ class bestellung{
             }
             return $user_article;
     }
-	
+
+    public function getDatumString(){
+        $datum = date("d.m.Y", $this->datum);
+        return $datum;
+    }
+    public function getDatumFileString(){
+        $datum = date("d_m_y", $this->datum);
+        return $datum;
+    }
+    
+    public function closeAll(){
+        $DB = new DB();
+        $ebest_query =  $query = "SELECT ebest_id FROM bestellung_gesamt WHERE datum = ".$this->datum;
+        $ebests = $DB->query($ebest_query);
+        $ebest_closeQuery = "UPDATE doener_einzelbestellung SET bestaetigt = '1' WHERE ebest_id = ?";
+        foreach($ebests as $i=>$ebest_id){
+            $test = $DB->update_values($ebest_closeQuery, array($ebest_id['ebest_id']));
+            if($test === false) {return false;}
+        }
+        return true;
+    }
+    
+    public function deleteEinzel($ebestID){
+        $DB = new DB();
+        $query_delete = "DELETE FROM doener_einzelbestellung WHERE ebest_id = ?";
+        $returner = $DB->update_values($query_delete, array($ebestID));
+        return $returner;
+    }
+    
     public function showTagesbestellung(){
         $DB = new DB();
-        $query = "SELECT * FROM bestellung_gesamt WHERE datum = ".$this->datum;
+        $query = "SELECT * FROM bestellung_gesamt WHERE datum = ".$this->datum." ORDER BY Nutzer";
         $tagesWerk = $DB->query($query);
-        return $tageswerk;
+        return $tagesWerk;
     }
     
 	public function getLetzteBestellung(){

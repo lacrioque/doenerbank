@@ -1,6 +1,7 @@
 <?php
 
 class einzelbestellung {
+    private $best_id;
     private $ebest_id;
     private $ebest_preis;
     private $artlist_ids = array();
@@ -8,6 +9,7 @@ class einzelbestellung {
 
     public function __construct($best_id, $user_id){
         $DB = new DB();
+        $this->best_id = $best_id;
         $query_ebest = "SELECT ebest_id,ebest_preis,bestaetigt FROM doener_einzelbestellung WHERE best_id = ? AND user_id = ?";
         $return = $DB->query_values($query_ebest, array($best_id, $user_id));
         varDump("Einzelbestellung");
@@ -28,14 +30,14 @@ class einzelbestellung {
 	public function openUp(){
 		$DB = new DB();
 		$query_open = "UPDATE doener_einzelbestellung SET bestaetigt = '0' WHERE ebest_id = ".$this->ebest_id;
-		$test = $DB->query($query_open);
+		$test = $DB->update($query_open);
 		return $test !== false ? true : false;
 	}
 	public function closeUp(){
 		//$artikel = $this->
 		$DB = new DB();
 		$query_close = "UPDATE doener_einzelbestellung SET bestaetigt = '1' WHERE ebest_id = ".$this->ebest_id;
-		$test = $DB->query($query_close);
+		$test = $DB->update($query_close);
 		return $test !== false ? true : false;
 	}
 	
@@ -91,6 +93,7 @@ class einzelbestellung {
     }
     
 	public function finalizeArticle($art_id, $bemerkung, $menge){
+            varDump($art_id, $bemerkung, $menge);
 		$DB = new DB();
 		$artikellisten = $this->getArtikellisten();
 		foreach($artikellisten as $artikelliste){
@@ -99,14 +102,13 @@ class einzelbestellung {
 				$query_artlist = "UPDATE doener_artikelliste SET bemerkungen = ? WHERE artlist_id = ?";
 				$DB->update_values($query_artlist, array($bemerkung, $artikelliste));
 				if($menge>1){
-                                        while($menge>0){
-                                                $menge-1;
+                                        for(;$menge>0;$menge--){
 						$this->registerArticle($art_id,$bemerkung);
 					}
 				}
                         } else { continue; }
 		}
-		
+		$this->saveAenderung();
 	}
 	
     public function unregisterArticle($artlist_id){

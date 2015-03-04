@@ -11,12 +11,12 @@ var administration = {
 	order_tpl: "\
 {{#user}}\
 <div class='container-fluid border-simple'>\
-	<div class='row-fluid'><div class='span12 text-center'><h3>{{name}} -- {{{gesamtPreis}}}</h3></div>\
+	<div class='row-fluid'><div class='span12 text-center'><h3>{{name}} -- <span class='formatEuro'>{{{gesamtPreis}}}</span></h3></div>\
 	<div class='row-fluid'>\
 		{{#artikel}}\
-			<div class='span5 artikel-einzel'>\
-				<p class='artikel-name'>{{menge}}x {{ Artikelname }} </p> \
-                                <p class='artikel-bemerkung'>{{ Artikelbemerkung }}</p>\
+			<div class='span4 artikel-einzel'>\
+				<p class='artikel-name'>{{ Artikelname }} </p> \
+                                <p class='artikel-bemerkung'>{{ bemerkungen }}</p>\
 				<p class='artikel-preis formatEuro'> {{ Artikelpreis }} </p>\
 			</div>\
 		{{/artikel}}\
@@ -119,13 +119,14 @@ var administration = {
 			btnOKClass: "btn-inverse",
 			callback : function(result){
 				if(result){
-					var url = "ajax/administration.php?admin=dasnicht&ebestid="+$(obj).data('order');
+					var url = "ajax/administration.php?admin=dasnicht&ebestid="+$(item).data('order');
 					$.getJSON(url, function(data){
 						data.success ? 
 						BootstrapDialog.alert('Bestellung gelöscht.') 
 						: BootstrapDialog.alert('Da ist was schief gegangen. Bitte später nochmal versuchen'); })
 				} else {
 					this.close();
+                                        location.reload();s
 				}
 		}
 		});
@@ -146,7 +147,35 @@ var administration = {
 				}
 			});
 	},
-	bestellung_loeschen: function(e){},
-	bestellung_schliessen: function(e){},
-	bestellung_schliessen_print: function(e){}
+	bestellung_loeschen: function(e){
+            e.preventDefault();
+            var url = "ajax/administration.php?admin=allesmist";
+			$.getJSON(url, function(data){
+				if(data.success == 'true'){
+					location.href='index.php';
+				}
+			});
+        },
+	bestellung_schliessen: function(e){
+            e.preventDefault();
+            var url = "ajax/administration.php?admin=gutistfuerheute";
+			$.getJSON(url, function(data){
+				if(data.success == 'true'){
+					location.href='index.php';
+				}
+			});
+        },
+	bestellung_schliessen_print: function(e){
+            e.preventDefault();
+            var url = "ajax/administration.php?admin=gutistfuerheutemitpdf";
+			$.getJSON(url, function(data){
+				if(data.success === true){
+                                    var urlpdf = "ajax/topdf.php";
+                                    window.open(urlpdf);
+//                                    $.get(url).done( function(){
+//                                        location.href= data.pdflink;
+//                                    });
+                                    }
+			});
+        }
 };

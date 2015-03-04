@@ -39,9 +39,19 @@ if($values['admin']=="schauschau"){
     $out = !$test ? json_encode(array("success"=> false)) : json_encode(array("success"=> true));
     die($out);
 } else if($values['admin']=="dasnicht") {
-	
+    $ebestID = $values['ebestid'];
+    $test = $bestellung->deleteEinzel($ebestID);
+    $out = !$test ? json_encode(array("success"=> false)) : json_encode(array("success"=> true));
+    die($out);
 } else if($values['admin']=="gutistfuerheute") {
-	
+    $test = $bestellung->closeAll();
+    $out = !$test ? json_encode(array("success"=> false)) : json_encode(array("success"=> true));
+    die($out);
+} else if($values['admin']=="gutistfuerheutemitpdf") {
+    $test = $bestellung->closeAll();
+    $pdf_name = 'einkaufsliste_'.$bestellung->getDatumFileString().".pdf";
+    $out = !$test ? json_encode(array("success"=> false)) : json_encode(array("success"=> true, "pdflink" => $pdf_name));
+    die($out);
 } else if($values['admin']=="allesmist") {
 	
 }

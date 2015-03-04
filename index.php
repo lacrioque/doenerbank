@@ -141,9 +141,9 @@
 					<div id="administration_bestellungen" class="container-fluid border-outer"></div>
                     <div class="row control">
                         <div class="btn-group" role="group">
-                            <button id="admin_bestellung_submit" class="btn-info">Speichern</button>
-                            <button id="admin_bestellung_clear" class="btn-info"> Löschen </button>
-                            <button id="admin_bestellung_print" class="btn-info">Speichern und Drucken</button>
+                            <button id="admin_bestellung_submit" class="btn btn-info">Speichern</button>
+                            <button id="admin_bestellung_clear" class="btn btn-info"> Löschen </button>
+                            <button id="admin_bestellung_print" class="btn btn-info">Speichern und Drucken</button>
                         </div>
                     </div>
                     <div class="row" id="user"></div>

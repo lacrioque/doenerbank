@@ -1,6 +1,6 @@
 <?php
 session_start();
-ini_set('display_errors', '0');
+ini_set('display_errors', '1');
 ini_set('memory_limit', '-1');
 ini_set('max_execution_time', '123455678');
 require_once("../inc/defines.php");
@@ -20,8 +20,9 @@ if($values['bestellung']=='uebersicht'){
 	$out = json_encode(array('success' => true, "gesamtPreis"=>$gesamtPreis, "artikelarray" => array('artikel'=>$artikel)));
 	
 } else if($values['bestellung']=='bestaetigen'){
-	$artikelDaten = json_decode($_POST['artikel'],true);
+	$artikelDaten = json_decode($_GET['artikel'],true);
 	foreach($artikelDaten as $artikel){
+            varDump($artikel);
 		$einzelbestellung->finalizeArticle($artikel['art_id'], $artikel['bemerkung'], $artikel['menge']);
 	}
 	$einzelbestellung->closeUp();

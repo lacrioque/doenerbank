@@ -101,10 +101,10 @@ class einzelbestellung {
 				if($menge>1){
                                         while($menge>0){
                                                 $menge-1;
-						
+						$this->registerArticle($art_id,$bemerkung);
 					}
 				}
-			}
+                        } else { continue; }
 		}
 		
 	}

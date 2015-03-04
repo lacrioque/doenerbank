@@ -35,8 +35,8 @@ CREATE TABLE doener_einzelbestellung (
     bestaetigt ENUM("0","1") DEFAULT"0"
 );
 
-CREATE VIEW bestellung_gesamt AS SELECT a.name as Artikelname,a.preis as Artikelpreis,
-        n.name Nutzer, tb.datum as datum, eb.ebest_preis as NutzerGesamtPreis, eb.ebest_id as EinzelbestellungID 
+CREATE VIEW bestellung_gesamt AS SELECT a.art_id, a.name as Artikelname,a.preis as Artikelpreis, al.artlist_id, eb.ebest_id,
+        n.name Nutzer, al.bemerkungen as Artikelbemerkung, tb.datum as datum, eb.ebest_preis as NutzerGesamtPreis, eb.ebest_id as EinzelbestellungID 
         FROM doener_tagesbestellung tb
         JOIN doener_einzelbestellung eb ON tb.best_id = eb.best_id
         JOIN doener_nutzer n ON eb.user_id = n.user_id

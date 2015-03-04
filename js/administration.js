@@ -15,7 +15,8 @@ var administration = {
 	<div class='row-fluid'>\
 		{{#artikel}}\
 			<div class='span5 artikel-einzel'>\
-				<p class='artikel-name'> {{ Artikelname }} </p> \
+				<p class='artikel-name'>{{menge}}x {{ Artikelname }} </p> \
+                                <p class='artikel-bemerkung'>{{ Artikelbemerkung }}</p>\
 				<p class='artikel-preis formatEuro'> {{ Artikelpreis }} </p>\
 			</div>\
 		{{/artikel}}\

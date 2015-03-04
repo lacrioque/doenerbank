@@ -130,7 +130,7 @@
     <?php else: ?>        
             <?php if($view == "order"):?>
                 <h1>Ein Gericht bestellen</h1>
-                <div class="container-fluid" id="artikelliste"></div>
+                <div class="container" id="artikelliste"></div>
                 <script>Artikel.render($('#artikelliste'));</script>
             <?php endif ?>
             <?php if($view == "admin"):?>

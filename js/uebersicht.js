@@ -59,6 +59,7 @@ var uebersicht = {
 		message += Mustache.render(message_tpl, {artikel: artikel});
 		message += "</ul>";
 		urldata = {artikel: JSON.stringify(artikel)};
+                console.log(urldata);
 		$.getJSON(url, urldata, function(data){
 			if(data.success == true){
 				BootstrapDialog.alert({

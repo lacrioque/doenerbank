@@ -15,9 +15,9 @@ var Artikel = {
             kategorien = artikel.kategorien;
             delete(artikel.kategorien);
             $.each(kategorien, function(i,kategorie){
-                html += "<div class='container-fluid'>"
+                html += "<div class='container'>"
                 html += Mustache.render(self.tpl_kategorie, {kategorie: kategorie});
-                html += '<div class="row" >'
+                html += '<div class="row-fluid" >'
                 for (var i = 0, l = artikel[kategorie].length, kat_art = artikel[kategorie], eArtikel; i<l; i++){
                     eArtikel = kat_art[i];
                     html += Mustache.render(self.tpl, eArtikel);
@@ -69,7 +69,7 @@ var Artikel = {
     container: $('#artikelliste'),
     tpl_debug: "{{#artikel}}{{{.}}}{{/artikel}}",
     tpl: "<div class='span3 artikel-einzel'><p class='artikel-name'> {{ name }} </p> <p class='artikel-beschreibung'> {{ &beschreibung }}</p><p class='artikel-preis'> {{ &preis }} </p> <button class='btn-primary btn-default artikel-bestellen artikel-interaktion' data-artikelnummer='{{ art_id }}' id='artikel_{{ art_id }}'><span>Will ich</span><span class='glyphicon glyphicon-shopping-cart' aria-hidden='true'></span></button><button class='artikel-interaktion btn-primary btn-default artikel-abbestellen hidden' data-artikelnummer='{{ art_id }}' id='artikel_rm_{{ art_id }} '><span>Will ich nicht mehr</span><span class='glyphicon glyphicon-shopping-cart' aria-hidden='true'></span></button></div>",
-    tpl_kategorie: "<div class='row'><h3> {{ kategorie }} </h3></div>",
+    tpl_kategorie: "<div class='row-fluid'><h3> {{ kategorie }} </h3></div>",
     tpl_noartikel: "<div class='span6 offset3 text-error'> Leider sind derzeit keine Artikel im System </div>",
     tpl_keine_artikel: function(){ return $('tpl_no_artikel').html();},
     refresh: function(){

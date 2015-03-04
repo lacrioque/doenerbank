@@ -45,22 +45,34 @@ class bestellung{
         $DB->update_values($query, $array);
     }
     
-	public function getNutzerBestellungen(){
-		$DB = new DB();
-        $query_user = "SELECT DISTINCT Nutzer, NutzerGesamtPreis,ebest_id FROM bestellung_gesamt WHERE datum = ".$this->datum;
-		$user = $DB->query($query_user);
-		$query_artikel = "SELECT * FROM bestellung_gesamt WHERE Nutzer = ? AND datum = ".$this->datum;
-		$user_article = array();
-		foreach ($user as $i=>$nutzer){
-			$user_article[] = array(
-				"name" => $nutzer['Nutzer'],
-				'gesamtPreis' => $nutzer['NutzerGesamtPreis'],
-                                'ebest_id' => $nutzer['ebest_id'],
-				"artikel" => $DB->query_values($query_artikel, array($nutzer['Nutzer']))
-			);	
-		}
-		return $user_article;
-	}
+    public function getArtikelForUser($user_id,$ebest_id){
+        $DB = new DB();
+        $query_artikel = "SELECT * FROM bestellung_gesamt WHERE Nutzer = ? AND datum = ".$this->datum;
+        $mengenQuery = "SELECT art_id,ebest_id,COUNT(art_id) as menge FROM doener_artikelliste WHERE ebest_id = ? AND art_id = ? GROUP BY ebest_id";
+        $artikel_array = $DB->query_values($query_artikel, array($user_id));
+        foreach ($artikel_array as $i => $artikel){
+            $menge = $DB->query_values($mengenQuery, array($ebest_id, $artikel['art_id']));
+            $artikel_array[$i]['menge'] = $menge[0]['menge'];
+        }
+        return $artikel_array;
+    }
+    
+    public function getNutzerBestellungen(){
+            $DB = new DB();
+            $query_user = "SELECT DISTINCT Nutzer, NutzerGesamtPreis, ebest_id FROM bestellung_gesamt WHERE datum = ".$this->datum;
+            $user = $DB->query($query_user);
+            $user_article = array();
+            foreach ($user as $i=>$nutzer){
+                $artikel = $this->getArtikelForUser($nutzer['Nutzer'], $nutzer['ebest_id']);
+                    $user_article[] = array(
+                            "name" => $nutzer['Nutzer'],
+                            'gesamtPreis' => $nutzer['NutzerGesamtPreis'],
+                            'ebest_id' => $nutzer['ebest_id'],
+                            "artikel" => $artikel
+                    );	
+            }
+            return $user_article;
+    }
 	
     public function showTagesbestellung(){
         $DB = new DB();

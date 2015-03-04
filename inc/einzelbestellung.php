@@ -72,13 +72,18 @@ class einzelbestellung {
 		return $this->geschlossen;
 	}
 	
-    public function registerArticle($art_id){
+    public function registerArticle($art_id, $bemerkung = false){
 		if($this->geschlossen){return array("geschlossen"=>true);}
         $DB = new DB();
         $artikel = new Artikel($art_id);
         $this->preis_erhoehen($artikel->preis());
-        $query_artlist = "INSERT INTO doener_artikelliste (ebest_id, art_id) VALUES(?, ?)";
-        $artlist_id = $DB->insert_values($query_artlist, array($this->ebest_id, $art_id));
+        if($bemerkung === false){
+            $query_artlist = "INSERT INTO doener_artikelliste (ebest_id, art_id) VALUES(?, ?)";
+            $artlist_id = $DB->insert_values($query_artlist, array($this->ebest_id, $art_id));
+        } else {
+            $query_artlist = "INSERT INTO doener_artikelliste (ebest_id, art_id, bemerkungen) VALUES(?, ?, ?)";
+            $artlist_id = $DB->insert_values($query_artlist, array($this->ebest_id, $art_id, $bemerkung));
+        }
         varDump("RegisterArticle");
         varDump($artlist_id);
         array_push($this->artlist_ids,$artlist_id);
@@ -94,10 +99,9 @@ class einzelbestellung {
 				$query_artlist = "UPDATE doener_artikelliste SET bemerkungen = ? WHERE artlist_id = ?";
 				$DB->update_values($query_artlist, array($bemerkung, $artikelliste));
 				if($menge>1){
-					$menge-1;
-					while($menge>0){
-						$query_artlist = "INSERT INTO doener_artikelliste (ebest_id, art_id, bemerkungen) VALUES(?, ?, ?)";
-						$artlist_id = $DB->insert_values($query_artlist, array($this->ebest_id, $art_id, $bemerkung));
+                                        while($menge>0){
+                                                $menge-1;
+						
 					}
 				}
 			}

@@ -19,7 +19,7 @@ var WARENKORB = function(){
 {{^artikel}}<div class='warenkorb-artikel leer'>Keinen Hunger?</div>{{/artikel}}";
     tpl_preis = "<p class='row-fluid'><span class='span4 offest6 pull-right clearfix'>Gesamtpreis: {{&preis}} </span></p>";
     kaufen = "";
-    icon = $('<span class="warenkorb-img"><img src="/img/warenkorb.png" alt="Warenkorb - Icon" /></span>');
+    icon = $('<span class="warenkorb-img"><div class="wk_label"><span id="warenkorb"></span></div><img src="/img/warenkorb.png" alt="Warenkorb - Icon" /></span>');
 	
 	getLast = function(){
 		var urldata, url, def = $.Deferred();

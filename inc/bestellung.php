@@ -47,7 +47,7 @@ class bestellung{
     
 	public function getNutzerBestellungen(){
 		$DB = new DB();
-        $query_user = "SELECT DISTINCT Nutzer, NutzerGesamtPreis FROM bestellung_gesamt WHERE datum = ".$this->datum;
+        $query_user = "SELECT DISTINCT Nutzer, NutzerGesamtPreis,ebest_id FROM bestellung_gesamt WHERE datum = ".$this->datum;
 		$user = $DB->query($query_user);
 		$query_artikel = "SELECT * FROM bestellung_gesamt WHERE Nutzer = ? AND datum = ".$this->datum;
 		$user_article = array();
@@ -55,6 +55,7 @@ class bestellung{
 			$user_article[] = array(
 				"name" => $nutzer['Nutzer'],
 				'gesamtPreis' => $nutzer['NutzerGesamtPreis'],
+                                'ebest_id' => $nutzer['ebest_id'],
 				"artikel" => $DB->query_values($query_artikel, array($nutzer['Nutzer']))
 			);	
 		}

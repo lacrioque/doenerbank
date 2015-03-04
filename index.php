@@ -136,9 +136,9 @@
             <?php if($view == "admin"):?>
                 <h1>Administration</h1>
                 <div class="container-fluid" id="administration">
-					<div id="administration_nutzer" class="container-fluid"></div>
+					<div id="administration_nutzer" class="container-fluid border-outer"></div>
 					
-					<div id="administration_bestellungen" class="container-fluid"></div>
+					<div id="administration_bestellungen" class="container-fluid border-outer"></div>
                     <div class="row control">
                         <div class="btn-group" role="group">
                             <button id="admin_bestellung_submit" class="btn-info">Speichern</button>

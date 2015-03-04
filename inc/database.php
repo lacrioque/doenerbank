@@ -9,7 +9,7 @@ class DB {
         $host_name  = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? 'localhost' : "db528830179.db.1and1.com";
         $database   = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? "doenerbank" : "db528830179"  ;
         $user_name  = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? "doenermann" : "dbo528830179";
-        $password   = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? "all4theD03N3r" : "";
+        $password   = strpos(__url,"localhost") || strpos(__url,"linmaonline") ? "all4theD03N3r" : "all4theD03N3r";
 		
         try {
             $connect = new PDO("mysql:dbname=".$database.";hostname=".$host_name.";charset=utf8", $user_name, $password);

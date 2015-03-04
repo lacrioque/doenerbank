@@ -27,6 +27,7 @@
     padding: 3px;
     text-align: center;
     margin-bottom: 5px;
+    border: 1px solid lightgray;
 }
 .artikel-einzel>.artikel-name{
     font-size: 130%;
@@ -39,9 +40,9 @@
     text-align: left;
 }
 .artikel-einzel>.artikel-preis{
-    text-align: right;
+    text-align: center;
     font-size: 110%;
-    color: darkred;
+    color: black;
 }
 .artikel-einzel>.artikel-interaktion{
     padding: 2px 14px;

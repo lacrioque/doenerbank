@@ -92,8 +92,8 @@
 				<div class="row-fluid">
 					<div class="text-success span10">
 						<p> <?php if($loggedIn){echo "Willkommen ".$user->getName();} ?></p>
-						<p><span class="" id="warenkorb"></span> </p>
 					</div>
+                    <span class="wk_label" id="warenkorb"></span> 
 
 					<div class="warenkorb-container span2">
 						  <span id="warenkorb-icon-container" class="warenkorb-icon-container"></span>

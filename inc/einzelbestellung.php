@@ -10,7 +10,7 @@ class einzelbestellung {
     public function __construct($best_id, $user_id){
         $DB = new DB();
         $this->best_id = $best_id;
-        $query_ebest = "SELECT ebest_id,ebest_preis,bestaetigt,geschlossen FROM doener_einzelbestellung WHERE best_id = ? AND user_id = ?";
+        $query_ebest = "SELECT ebest_id,ebest_preis,bestaetigt FROM doener_einzelbestellung WHERE best_id = ? AND user_id = ?";
         $return = $DB->query_values($query_ebest, array($best_id, $user_id));
         varDump("Einzelbestellung");
         varDump($return);
@@ -23,7 +23,7 @@ class einzelbestellung {
 				$query = "INSERT INTO doener_einzelbestellung (user_id,best_id) VALUES(?,?)";
 				$this->ebest_id = $DB->insert_values($query, array($user_id, $best_id, $this->ebest_preis));
 			}
-            if($this->debug){varDump(array($this->ebest_id, $user_id, $best_id, $this->ebest_preis));}
+            varDump(array($this->ebest_id, $user_id, $best_id, $this->ebest_preis));
         } else {
             $this->ebest_id = $return[0]['ebest_id'];
 			$this->geschlossen = $return[0]['bestaetigt'] == 1 ? true : false;

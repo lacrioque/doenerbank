@@ -10,6 +10,7 @@
 			$_SESSION['loggedin'] = $user->sessionCrypt();
                         $bestellung = new bestellung();
                         $_SESSION['best_id'] = $bestellung->getBestId();
+						$_SESSION['bestellung']['geschlossen'] = $bestellung->istGeschlossen();
                         varDump($_SESSION);
 		}
 	}
@@ -22,6 +23,7 @@
 			$_SESSION['user_id'] = $user->getID();
                         $bestellung = new bestellung();
                         $_SESSION['best_id'] = $bestellung->getBestId();
+						$_SESSION['bestellung']['geschlossen'] = $bestellung->istGeschlossen();
                         varDump($_SESSION);
 		}
     }
@@ -144,24 +146,31 @@
 				<div class="container">
 					<div class="row-fluid">
 					<div class="span2">
-						<div class="container-fluid" id="administration-menu"></div>
+						<div class="container-fluid" id="administration-menu">
+							<ul class="nav nav-list">
+								<li class="nav-header"> Administration</li>
+								<li class="active"><a href='#bestellung' data-view='bestellung' class='administration_navigation' id='admin_bestellungen'>Bestellungen</a></li>
+								<li ><a href='#benutzer' data-view='benutzer' class='administration_navigation' id='admin_benutzer'>Benutzer</a></li>
+							</ul>
+						</div>
 					</div>
 						<div class="span10">
 							<div class="container-fluid" id="administration">
-								
-							<h3>Benutzer</h3>
-								<div id="administration_nutzer" class="container-fluid"></div>
-							<h3>Bestellungen</h3>
-							<div id="administration_bestellungen" class="container-fluid"></div>
-								<div class="btn-group adminbuttons" role="group">
-									<button id="admin_bestellung_submit" class="btn-info btn">Speichern</button>
-									<button id="admin_bestellung_clear" class="btn-info btn"> Löschen </button>
-									<button id="admin_bestellung_print" class="btn-info btn">Speichern und Drucken</button>
-								</div>
-							<div class="row" id="user"></div>
-
-
-							<div class="row" id="bestellungen" class="hidden"></div>
+							<div class='row-fluid hidden' id='view_bestellungen'>	
+								<h3>Bestellungen</h3>
+								<div id="administration_bestellungen" class="container-fluid"></div>
+									<div class="btn-group adminbuttons" role="group">
+										<button id="admin_bestellung_submit" class="btn-info btn">Speichern</button>
+										<button id="admin_bestellung_clear" class="btn-info btn"> Löschen </button>
+										<button id="admin_bestellung_print" class="btn-info btn">Speichern und Drucken</button>
+									</div>
+	<!--							<div class="row" id="bestellungen" class="hidden"></div>-->
+							</div>
+							<div class='row-fluid hidden' id='view_benutzer'>	
+								<h3>Benutzer</h3>
+									<div id="administration_nutzer" class="container-fluid"></div>
+	<!--								<div class="row" id="user"></div>-->
+									</div>
 							</div>
 						</div>
 					</div>

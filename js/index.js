@@ -15,6 +15,11 @@ var n = this,
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
  };
  
+ function locateAnsicht(url){
+	 var urlparts = url.split('#');
+	 return urlparts[1] || false;
+ }
+ 
  var LOGIN = function(){
    $('#register_btn').on('click', function(e){
    e.preventDefault();

@@ -22,8 +22,23 @@ var administration = {
                                 <p class='artikel-bemerkung'>{{ Artikelbemerkung }}</p>\
 				<p class='artikel-preis formatEuro'> {{ Artikelpreis }} </p>\
 			</div>",
+	updateView: function(ansicht){
+		if(!$('#view_benutzer').hasClass('hidden')){ $('#view_benutzer').addClass('hidden'); }
+		if(!$('#view_bestellungen').hasClass('hidden')){$('#view_bestellungen').addClass('hidden');}
+		if(ansicht==='bestellung' || ansicht === false){
+			$('#view_bestellungen').removeClass('hidden');
+		} else if (ansicht==='benutzer'){
+			$('#view_benutzer').removeClass('hidden');
+		}
+	},
 	init: function(){
-		var self = this;
+		var self = this, ansicht = locateAnsicht(location.href);
+		self.updateView(ansicht);
+		$('.administration_navigation').on('click', function(){
+			$('.administration_navigation').each(function(){$(this).closest('li').removeClass('active')});
+			$(this).closest('li').addClass('active');
+			self.updateView($(this).data('view'));
+		});
 		this.get_data().done(function(users, orders, geschlossen){
 			var html, user_html, order_html, trigger;
 			Mustache.parse(self.user_tpl);
@@ -42,7 +57,7 @@ var administration = {
 						j=0;
 					}
 				}
-				order_html += "</div>";
+				order_html += "</div></div>";
 				order_html += Mustache.render(self.order_tpl_2, order_now);
 
 			});
@@ -123,6 +138,7 @@ var administration = {
 						: BootstrapDialog.alert('Da ist was schief gegangen. Bitte später nochmal versuchen'); })
 				} else {
 					this.close();
+					location.reload();
 				}
 		}
 		});
@@ -144,7 +160,7 @@ var administration = {
 						: BootstrapDialog.alert('Da ist was schief gegangen. Bitte später nochmal versuchen'); })
 				} else {
 					this.close();
-                                        location.reload();s
+                    location.reload();
 				}
 		}
 		});
@@ -190,9 +206,7 @@ var administration = {
 				if(data.success === true){
                                     var urlpdf = "ajax/topdf.php";
                                     window.open(urlpdf);
-//                                    $.get(url).done( function(){
-//                                        location.href= data.pdflink;
-//                                    });
+									location.reload();
                                     }
 			});
         }

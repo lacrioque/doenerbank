@@ -36,7 +36,7 @@ if($values['admin']=="schauschau"){
     die($out);
 } else if($values['admin']=="nichtmehrtoll") {
     $noMoreAdmin = new user($values['uid']);
-    $test = $noMoreAdmin->setAdmin();
+    $test = $noMoreAdmin->unsetAdmin();
     $out = !$test ? json_encode(array("success"=> false)) : json_encode(array("success"=> true));
     die($out);
 } else if($values['admin']=="dasnicht") {

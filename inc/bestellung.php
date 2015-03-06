@@ -4,11 +4,12 @@ class bestellung{
     private $datum;
     private $best_id;
     private $best_data;
+	private $geschlossen;
 
     public function __construct(){
         $this->datum = $begin = mktime(0,0,0,date("m"),date("d"),date("Y"));
         $DB = new DB();
-        $query="SELECT best_id, datum,gesamtpreis,bemerkungen FROM doener_tagesbestellung WHERE datum = ?";
+        $query="SELECT best_id, datum,gesamtpreis,bemerkungen,closed FROM doener_tagesbestellung WHERE datum = ?";
         $result =  $DB->query_values($query, array($this->datum));
         varDump("query bestellung nach datum");
         varDump($result);
@@ -20,6 +21,7 @@ class bestellung{
 			varDump($this->best_id);
         } else {
             $this->best_data = $result[0];
+			$this->geschlossen = $result[0]['closed'];
             $this->best_id = $this->best_data['best_id'];
         }
     }
@@ -78,8 +80,20 @@ class bestellung{
         return $datum;
     }
     
+	public function istGeschlossen(){
+		return $this->geschlossen == 1 ? true : false ;
+	}
+	
+	public function close(){
+		$DB = new DB();
+		$closeQuery  = "UPDATE doener_tagesbestellung SET closed = '1' WHERE best_id = " + $this->best_id;
+		$test = $DB->update($closeQuery);
+		return $test;
+	}
+	
     public function closeAll(){
         $DB = new DB();
+		$this->close();
         $ebest_query =  $query = "SELECT ebest_id FROM bestellung_gesamt WHERE datum = ".$this->datum;
         $ebests = $DB->query($ebest_query);
         $ebest_closeQuery = "UPDATE doener_einzelbestellung SET bestaetigt = '1' WHERE ebest_id = ?";

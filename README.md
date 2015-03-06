@@ -1,4 +1,4 @@
-# doenerbank
+# Die Dönerbank
 
 ##Schulprojekt Dönerbank 
 

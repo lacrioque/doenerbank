@@ -19,7 +19,7 @@ var WARENKORB = function(){
 {{^artikel}}<div class='warenkorb-artikel leer'>Keinen Hunger?</div>{{/artikel}}";
     tpl_preis = "<p class='row-fluid'><span class='span4 offest6 pull-right clearfix'>Gesamtpreis: {{&preis}} </span></p>";
     kaufen = "";
-    icon = $('<span class="warenkorb-img"><div class="wk_label"><span id="warenkorb"></span></div><img src="/img/warenkorb.png" alt="Warenkorb - Icon" /></span>');
+    icon = $('<span class="warenkorb-img"><div class="wk_label"><span class="warenkorb-menge" id="warenkorb"></span></div><img src="/img/warenkorb.png" alt="Warenkorb - Icon" /></span>');
 	
 	getLast = function(){
 		var urldata, url, def = $.Deferred();
@@ -77,11 +77,11 @@ var WARENKORB = function(){
     return {
         init: function(){
             var self = this;
-           $('#warenkorb-icon-container').html(icon);
+           $('.warenkorb-icon-container').html(icon);
            $('#warenkorb').on('change', function(){
-               $(this).html(korb.length);
+               $('.warenkorb-menge').each(function(){$(this).html(korb.length);});
            });
-           $('#warenkorb-icon-container').on('click', function(){
+           $('.warenkorb-icon-container').on('click', function(){
 					show().done(function(data, gesamtPreis){
 						if(data.geschlossen === true){
 							BootstrapDialog.alert({message: 'Diese Bestellung ist bereits geschlossen.<br>Morgen gibt es eine neue Möglichkeit.'});

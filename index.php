@@ -136,23 +136,32 @@
             <?php endif ?>
             <?php if($view == "admin"):?>
                 <h1>Administration</h1>
-                
-                <div class="container-fluid" id="administration">
-                <h3>Benutzer</h3>
-					<div id="administration_nutzer" class="container-fluid"></div>
-                    <h3>Bestellungen</h3>
-					<div id="administration_bestellungen" class="container-fluid"></div>
-                        <div class="btn-group adminbuttons" role="group">
-                            <button id="admin_bestellung_submit" class="btn-info btn">Speichern</button>
-                            <button id="admin_bestellung_clear" class="btn-info btn"> Löschen </button>
-                            <button id="admin_bestellung_print" class="btn-info btn">Speichern und Drucken</button>
-                        </div>
-                    <div class="row" id="user"></div>
-                    
-                    
-                    <div class="row" id="bestellungen" class="hidden"></div>
-                    <script>administration.init();</script>
-                </div>
+				<div class="container">
+					<div class="row-fluid">
+					<div class="span2">
+						<div class="container-fluid" id="administration-menu"></div>
+					</div>
+						<div class="span10">
+							<div class="container-fluid" id="administration">
+								
+							<h3>Benutzer</h3>
+								<div id="administration_nutzer" class="container-fluid"></div>
+							<h3>Bestellungen</h3>
+							<div id="administration_bestellungen" class="container-fluid"></div>
+								<div class="btn-group adminbuttons" role="group">
+									<button id="admin_bestellung_submit" class="btn-info btn">Speichern</button>
+									<button id="admin_bestellung_clear" class="btn-info btn"> Löschen </button>
+									<button id="admin_bestellung_print" class="btn-info btn">Speichern und Drucken</button>
+								</div>
+							<div class="row" id="user"></div>
+
+
+							<div class="row" id="bestellungen" class="hidden"></div>
+							</div>
+						</div>
+					</div>
+					<script>administration.init();</script>
+				</div>
             <?php endif ?>
             <?php if($view == "uebersicht"):?>
                 <h1>Übersicht</h1>

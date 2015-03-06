@@ -86,7 +86,7 @@ class bestellung{
 	
 	public function close(){
 		$DB = new DB();
-		$closeQuery  = "UPDATE doener_tagesbestellung SET closed = '1' WHERE best_id = " + $this->best_id;
+		$closeQuery  = "UPDATE doener_tagesbestellung SET closed = '1' WHERE best_id = ".$this->best_id;
 		$test = $DB->update($closeQuery);
 		return $test;
 	}

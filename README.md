@@ -1,6 +1,13 @@
 # doenerbank
-Schulprojekt Dönerbank Ein System um schnell und einfach den Pausendöner zu bestellen
 
+##Schulprojekt Dönerbank 
+
+Ein System um schnell und einfach den Pausendöner zu bestellen
 im Doku Ordnern sind die passenden SQL-Statements und ein ERM
 
-Status alpha 0.0.1
+TODO:
+*alle Bestellungen schließen überprüfen.
+*Bestellungen - Historie
+
+
+Status 0.1.0.beta

@@ -8,35 +8,45 @@ var administration = {
 	<div class='span2'><button class='btn btn-danger admin_user_delete' data-user='{{user_id}}'>Löschen</button></div>\
 </div>\
 {{/user}}",
-	order_tpl: "\
-{{#user}}\
-<div class='container-fluid border-simple'>\
+	order_tpl_1: "<div class='container-fluid border-simple'>\
 	<div class='row-fluid'><div class='span12 text-center'><h3>{{name}} -- <span class='formatEuro'>{{{gesamtPreis}}}</span></h3></div>\
-	<div class='row-fluid'>\
-		{{#artikel}}\
-			<div class='span4 artikel-einzel'>\
-				<p class='artikel-name'>{{ Artikelname }} </p> \
-                                <p class='artikel-bemerkung'>{{ bemerkungen }}</p>\
-				<p class='artikel-preis formatEuro'> {{ Artikelpreis }} </p>\
-			</div>\
-		{{/artikel}}\
-	</div>\
-	<div class='row-fluid'>\
-		<div class='span3 pull-right text-right'>\
+	<div class='row-fluid'>",
+	order_tpl_2: "<div class='row-fluid'>\
+		<div class='span3 offset9 text-right'>\
 			<button class='btn btn-inverse admin_bestellung_delete' data-order='{{ebest_id}}'>Bestellung löschen</button>\
 		</div>\
 	</div>\
-    </div>\
-{{/user}}\
-",
+    </div>",
+	artikel_tpl: "<div class='span3 artikel-einzel'>\
+				<p class='artikel-name'>{{ Artikelname }} </p> \
+                                <p class='artikel-bemerkung'>{{ Artikelbemerkung }}</p>\
+				<p class='artikel-preis formatEuro'> {{ Artikelpreis }} </p>\
+			</div>",
 	init: function(){
 		var self = this;
 		this.get_data().done(function(users, orders){
 			var html, user_html, order_html, trigger;
 			Mustache.parse(self.user_tpl);
-			Mustache.parse(self.order_tpl);
+			Mustache.parse(self.order_tpl_1);
+			Mustache.parse(self.order_tpl_2);
+			Mustache.parse(self.artikel_tpl);
 			user_html = Mustache.render(self.user_tpl, {user: users});
-			order_html = Mustache.render(self.order_tpl, {user : orders});
+			order_html = "";
+			$.each(orders, function(i,order_now){
+				order_html += Mustache.render(self.order_tpl_1, order_now);
+				
+				for(var i=0,j=1,lng = order_now.artikel.length; i<lng; i++,j++ ){
+					order_html += Mustache.render(self.artikel_tpl, order_now.artikel[i]);
+					if(j===4){
+						order_html += '</div><div class="row-fluid" >';
+						j=0;
+					}
+				}
+				order_html += "</div>";
+				order_html += Mustache.render(self.order_tpl_2, order_now);
+
+			});
+			//order_html = Mustache.render(self.order_tpl, {user : orders});
 			$('#administration_nutzer').html(user_html);
 			$('#administration_bestellungen').html(order_html);
                         

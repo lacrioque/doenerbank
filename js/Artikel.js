@@ -17,10 +17,14 @@ var Artikel = {
             $.each(kategorien, function(i,kategorie){
                 html += "<div class='container'>"
                 html += Mustache.render(self.tpl_kategorie, {kategorie: kategorie});
-                html += '<div class="row-fluid" >'
-                for (var i = 0, l = artikel[kategorie].length, kat_art = artikel[kategorie], eArtikel; i<l; i++){
+                html += '<div class="row-fluid" >';
+                for (var i = 0,j=1, l = artikel[kategorie].length, kat_art = artikel[kategorie], eArtikel; i<l; i++,j++){
                     eArtikel = kat_art[i];
                     html += Mustache.render(self.tpl, eArtikel);
+					if(j===4){
+						html += '</div><div class="row-fluid" >';
+						j=0;
+					}
                 }
                 html += '</div>';
                 html += '</div>';

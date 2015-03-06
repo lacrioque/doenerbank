@@ -64,23 +64,28 @@
 </head>
 
 <body>
-    <?php echo $adminHint; ?>
+    
     <div id="triggerling" class="hidden">&nbsp;</div>
     <div class="html-mobile-background"></div>
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <div class="container">
-            
+           
           <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+					
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
+		
      
           <!-- Be sure to leave the brand out there if you want it shown -->
           <a class="brand" href="index.php?view=order">D&ouml;nerbank</a>
-		  
+		  <div class="warenkorb-container visible-phone">
+		  <span id="warenkorb-icon-container" class="warenkorb-icon-container"></span>
+		  <div id="warenkorb-vorschau" class="warenkorb-vorschau"></div>
+		</div>
           <!-- Everything you want hidden at 940px or less, place within here -->
           <div class="nav-collapse collapse">
             <!-- .nav, .navbar-search, .navbar-form, etc -->
@@ -91,12 +96,11 @@
           </ul> 
             <div class="span3 pull-right clearfix">
 				<div class="row-fluid">
-					<div class="greeting span10">
+					<div class="greeting span10 visible-desktop">
 						<p> <?php if($loggedIn){echo "Willkommen ".$user->getName();} ?></p>
 					</div>
                      
-
-					<div class="warenkorb-container span2">
+					<div class="warenkorb-container span2 visible-desktop">
 						  <span id="warenkorb-icon-container" class="warenkorb-icon-container"></span>
 						  <div id="warenkorb-vorschau" class="warenkorb-vorschau"></div>
 					</div>
@@ -110,6 +114,7 @@
 		<p class="text-center"><strong>Achtung!</strong> Die Bestellung ist schon geschlossen. Entweder ist schon bestellt, oder deine Bestellung wurde schon gespeichert.</p>
         </div>
     <div class="container maincontent">
+	<?php echo $adminHint; ?>
     <?php if($loggedIn == false):?>
             <div id="login_window">
                 <form method="post">

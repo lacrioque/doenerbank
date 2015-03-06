@@ -19,9 +19,10 @@ $bestellung = new bestellung();
 if($values['admin']=="schauschau"){
 	$out = "";
 	$bestellungen = $bestellung->getNutzerBestellungen();
+	$geschlossen = $bestellung->istGeschlossen();
 	$user_query = "SELECT * FROM doener_nutzer";
 	$user = $DB->query($user_query);
-	die(json_encode(array("success"=>true, "users"=>$user, "orders"=>$bestellungen)));
+	die(json_encode(array("success"=>true, "users"=>$user, "orders"=>$bestellungen, "geschlossen" => $geschlossen)));
 
 } else if($values['admin']=="dennichtmehr") {
     $deleteQuery = "DELETE FROM doener_nutzer WHERE user_id = ?";

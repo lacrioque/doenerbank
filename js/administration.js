@@ -31,7 +31,7 @@ var administration = {
 ",
 	init: function(){
 		var self = this;
-		this.get_data().done(function(users, orders){
+		this.get_data().done(function(users, orders, geschlossen){
 			var html, user_html, order_html, trigger;
 			Mustache.parse(self.user_tpl);
 			Mustache.parse(self.order_tpl);
@@ -39,7 +39,15 @@ var administration = {
 			order_html = Mustache.render(self.order_tpl, {user : orders});
 			$('#administration_nutzer').html(user_html);
 			$('#administration_bestellungen').html(order_html);
-                        
+            
+			if(geschlossen) {
+				$('.adminbuttons').fadeOut(600, function(){
+					$('.adminbuttons').prepend(
+							"<div class='alert alert-error'> Tagesbestellung geschlossen</div>"
+							);
+				});
+			}
+			
 			$(".admin_user_admin").each(function(){
                             $(this).bootstrapSwitch();
                             $(this).on('switchChange.bootstrapSwitch', function(event, state) {
@@ -83,7 +91,7 @@ var administration = {
                                     user.online = user.loggedIn === 'false' ? "<span class='offline'>&nbsp;</span>" :  "<span class='online'>&nbsp;</span>";
                                     user.isAdminChecked = user.admin == 1 ? "checked" : ""; 
 				});
-				q.resolve(users, orders);
+				q.resolve(users, orders, datablock.geschlossen);
 			}
 		});
 		return q;
